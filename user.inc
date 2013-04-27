@@ -73,6 +73,11 @@ class user extends ldap
 		$data['inetAuthorizedServices'][] = 'smtp';
 		$data['inetAuthorizedServices'][] = 'smtps';
 		$data['objectClass'] = $this->schema['objectClass'];
+		if( $row['ipHostNumber'] )
+        {
+            $data['objectClass'][] = 'ipHost';
+            $data['ipHostNumber'] = $row['ipHostNumber'];
+        }
 		$data['owner'] = ($row['owner']?"{$row['owner']}":"{$GLOBALS['CONFIG']['LDAP_ADMIN']}");
 		$data['member'] = ($row['owner']?"{$row['owner']}":"{$GLOBALS['CONFIG']['LDAP_ADMIN']}");
 		

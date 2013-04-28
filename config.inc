@@ -24,30 +24,52 @@ $GLOBALS['CONFIG']['THROW_ERRORS'] 	= (E_ALL | E_STRICT) & ~E_NOTICE;
 switch( $_SERVER["HTTP_HOST"] )
 {
 	case 'api.dev.olympe-network.com':
+        $conf = parse_ini_file('/dns/com/olympe-network/etc/settings/api.dev.ini', true);
+        $conf['type'] = 'file';
+		break;
 	case 'api.olympe-network.com':
 		$conf = parse_ini_file('/dns/com/olympe-network/etc/settings/api.ini', true);
+        $conf['type'] = 'vcap';
 		break;
 	case 'api.dev.anotherservice.com':
+        $conf = parse_ini_file('/dns/com/anotherservice/etc/settings/api.dev.ini', true);
+        $conf['type'] = 'file';
+		break;
 	case 'api.anotherservice.com':
 		$conf = parse_ini_file('/dns/com/anotherservice/etc/settings/api.ini', true);
+        $conf['type'] = 'vcap';
 		break;
 	case 'api.dev.bus-it.com':
+        $conf = parse_ini_file('/dns/com/bus-it/etc/settings/api.dev.ini', true);
+        $conf['type'] = 'file';
+		break;
 	case 'api.bus-it.com':
 		$conf = parse_ini_file('/dns/com/bus-it/etc/settings/api.ini', true);
+        $conf['type'] = 'vcap';
 		break;
 	default:
 		$conf = parse_ini_file('/dns/com/anotherservice/etc/settings/api.ini', true);
+        $conf['type'] = 'file';
 }
-
-$services_json = getenv('VCAP_SERVICES');
-$services = json_decode($services_json, true);
-$mysql_config = $services['mysql-5.1'][0]['credentials'];
-
-$GLOBALS['CONFIG']['DB_HOST'] 		= $mysql_config['hostname'];
-$GLOBALS['CONFIG']['DB_PORT'] 		= $mysql_config['port'];
-$GLOBALS['CONFIG']['DB_USERNAME'] 	= $mysql_config['user'];
-$GLOBALS['CONFIG']['DB_PASSWORD'] 	= $mysql_config['password'];
-$GLOBALS['CONFIG']['DB_DATABASE'] 	= $mysql_config['name'];
+if( $conf['type'] == 'vcap' )
+{
+    $services_json = getenv('VCAP_SERVICES');
+    $services = json_decode($services_json, true);
+    $mysql_config = $services['mysql-5.1'][0]['credentials'];
+    $GLOBALS['CONFIG']['DB_HOST']           = $mysql_config['hostname'];
+    $GLOBALS['CONFIG']['DB_PORT']           = $mysql_config['port'];
+    $GLOBALS['CONFIG']['DB_USERNAME']       = $mysql_config['user'];
+    $GLOBALS['CONFIG']['DB_PASSWORD']       = $mysql_config['password'];
+    $GLOBALS['CONFIG']['DB_DATABASE']       = $mysql_config['name'];
+}
+else
+{
+    $GLOBALS['CONFIG']['DB_HOST'] 		= $conf['Main']['MYSQL_HOST'];
+    $GLOBALS['CONFIG']['DB_PORT'] 		= $conf['Main']['MYSQL_PORT'];
+    $GLOBALS['CONFIG']['DB_USERNAME'] 	= $conf['Main']['MYSQL_USERNAME'];
+    $GLOBALS['CONFIG']['DB_PASSWORD'] 	= $conf['Main']['MYSQL_PASSWORD'];
+    $GLOBALS['CONFIG']['DB_DATABASE'] 	= $conf['Main']['MYSQL_DATABASE'];
+}
 $GLOBALS['CONFIG']['LDAP_HOST'] 	= $conf['Main']['LDAP_HOST'];
 $GLOBALS['CONFIG']['LDAP_PORT'] 	= $conf['Main']['LDAP_PORT'];
 $GLOBALS['CONFIG']['LDAP_USERNAME']	= $conf['Main']['LDAP_USERNAME'];

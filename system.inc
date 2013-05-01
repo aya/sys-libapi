@@ -95,7 +95,10 @@ class system
 			switch( $type )
 			{		
 				case self::APP:
-					$commands[] = "ln -s {$data['homeDirectory']} {$data['targetDirectory']}";
+					if( $mode == 'add' )
+						$commands[] = "ln -s {$data['homeDirectory']} {$data['targetDirectory']}";
+					else if( $mode == 'delete' )
+						$commands[] = "rm {$data['targetDirectory']}";
 				break;
 			}
 			

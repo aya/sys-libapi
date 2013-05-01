@@ -87,6 +87,21 @@ class system
 			$this->exec($commands);
 		}		
 	}
+	
+	public function update($type, $data, $mode)
+	{
+		if( strlen($data['homeDirectory']) > 5 )
+		{
+			switch( $type )
+			{		
+				case self::APP:
+					$commands[] = "ln -s {$data['homeDirectory']} {$data['targetDirectory']}";
+				break;
+			}
+			
+			$this->exec($commands);
+		}		
+	}	
 
 	public function getquota($uidnumber)
 	{

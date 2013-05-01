@@ -174,7 +174,7 @@ class ldap
 
 	public function getDNfromHostname($hostname)
 	{
-		$filter = '(associatedDomain=' . $hostname . ')';
+		$filter = '(associateddomain=' . $hostname . ')';
 		$entry = $GLOBALS['ldap']->search($GLOBALS['CONFIG']['LDAP_BASE'], $filter);
 		
 		if( $entry[0]['dn'] )

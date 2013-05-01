@@ -171,6 +171,17 @@ class ldap
 		else
 			return false;	
 	}
+
+	public function getDNfromHostname($hostname)
+	{
+		$filter = '(associateddomain=' . $hostname . ')';
+		$entry = $GLOBALS['ldap']->search($GLOBALS['CONFIG']['LDAP_BASE'], $filter);
+		
+		if( $entry[0]['dn'] )
+			return $entry[0]['dn'];
+		else
+			return false;	
+	}
 	
 	public function newUID()
 	{

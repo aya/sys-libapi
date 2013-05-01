@@ -90,6 +90,24 @@ class system
 			$this->exec($commands);
 		}		
 	}
+	
+	public function update($type, $data, $mode)
+	{
+		if( strlen($data['homeDirectory']) > 5 )
+		{
+			switch( $type )
+			{		
+				case self::APP:
+					if( $mode == 'add' )
+						$commands[] = "ln -s {$data['homeDirectory']} {$data['targetDirectory']}";
+					else if( $mode == 'delete' )
+						$commands[] = "rm {$data['targetDirectory']}";
+				break;
+			}
+			
+			$this->exec($commands);
+		}		
+	}	
 
 	public function getquota($uidnumber)
 	{

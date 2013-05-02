@@ -35,9 +35,8 @@ class system
 				$commands[] = "mkdir -p {$data['homeDirectory']} && rmdir {$data['homeDirectory']} && cp -a {$GLOBALS['CONFIG']['GIT_TEMPLATE']} {$data['homeDirectory']}.git && chown -R {$data['uidNumber']}:{$data['gidNumber']} {$data['homeDirectory']}.git && chmod 770 {$data['homeDirectory']}.git && mkdir -p {$data['homeDirectory']} && cd {$data['homeDirectory']} && git clone file://{$data['homeDirectory']}.git . && chown -R {$data['uidNumber']} {$data['homeDirectory']} && chgrp -R {$data['gidNumber']} {$data['homeDirectory']} && chmod 750 {$data['homeDirectory']}";
 			break;
 			case self::APP:
-				$commands[] = "cat /root/.vmc_token.template | sed -e \"s#TOKEN#{$data['token']}#g\" > /root/.vmc_token && mkdir -p {$data['homeDirectory']} && cp -a {$GLOBALS['CONFIG']['GIT_TEMPLATE']} {$data['homeDirectory']}.git && chown -R {$data['uidNumber']}:{$data['gidNumber']} {$data['homeDirectory']}* && cd {$data['homeDirectory']} && cd .. && mkdir -p dev/{$data['uid']} && git clone {$data['homeDirectory']}.git .";
-				$commands[] = "cd {$data['homeDirectory']} && cd .. && cd dev/{$data['uid']} && cp -a {$GLOBALS['CONFIG']['ROOT_VAR']}/templates/{$data['application']}/* . && {$GLOBALS['CONFIG']['ROOT_BIN']}/create-manifest {$data['uid']} {$GLOBALS['CONFIG']['APP_MEMORY']} {$data['url']} {$data['framework']} {$data['runtime']} && cd .. && chown -R {$data['uidNumber']}:{$data['gidNumber']} {$data['uid']} && chmod 770 {$data['uid']} && cd {$data['uid']} && git commit -a -m "Auto first commit && git push origin master && git branch develop && git push origin develop && git branch production && git push origin production"
-				$commands[] = "cd {$data['homeDirectory']} && cd .. && cd dev/{$data['uid']} && vmc push {$data['uid']} --path ./";
+				$commands[] = "{$GLOBALS['CONFIG']['ROOT_BIN']}/create-app {$data['uid']} {$data['homeDirectory']} {$data['token']} {$data['uidNumber']} {$data['gidNumber']} {$data['application']} {$GLOBALS['CONFIG']['APP_MEMORY']} {$data['url']} {$data['framework']} {$data['runtime']}";
+				$commands[] = "cd {$data['homeDirectory']} && vmc push {$data['uid']} --path ./";
 			break;
 			case self::GIT:
 				$commands[] = "mkdir -p {$data['homeDirectory']} && cd {$data['homeDirectory']} && cp -a {$GLOBALS['CONFIG']['GIT_TEMPLATE']}/* {$data['homeDirectory']}/ && chown -R {$data['uidNumber']}:{$data['uidNumber']} {$data['homeDirectory']} && chmod 770 {$data['homeDirectory']} && chmod -R g+w {$data['homeDirectory']} && find {$data['homeDirectory']} -type d -exec chmod g+s {} \; && cd {$data['homeDirectory']} && cd .. && ln -s {$data['uid']} {$data['description']}";
@@ -71,6 +70,7 @@ class system
 					$commands[] = "rm -Rf {$data['homeDirectory']}.git";
 				break;
 				case self::APP:
+					$commands[] = "cd {$data['homeDirectory']} && cd ../../dev/Apps && rm -Rf {$data['uid']}";
 					$commands[] = "rm -Rf {$data['homeDirectory']}";
 					$commands[] = "rm -Rf {$data['homeDirectory']}.git";
 				break;

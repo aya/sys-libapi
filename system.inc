@@ -35,7 +35,8 @@ class system
 				$commands[] = "mkdir -p {$data['homeDirectory']} && rmdir {$data['homeDirectory']} && cp -a {$GLOBALS['CONFIG']['GIT_TEMPLATE']} {$data['homeDirectory']}.git && chown -R {$data['uidNumber']}:{$data['gidNumber']} {$data['homeDirectory']}.git && chmod 770 {$data['homeDirectory']}.git && mkdir -p {$data['homeDirectory']} && cd {$data['homeDirectory']} && git clone file://{$data['homeDirectory']}.git . && chown -R {$data['uidNumber']} {$data['homeDirectory']} && chgrp -R {$data['gidNumber']} {$data['homeDirectory']} && chmod 750 {$data['homeDirectory']}";
 			break;
 			case self::APP:
-				$commands[] = "cat /root/.vmc_token.template | sed -e \"s#TOKEN#{$data['token']}#g\" > /root/.vmc_token && mkdir -p {$data['homeDirectory']} && cp -a {$GLOBALS['CONFIG']['GIT_TEMPLATE']} {$data['homeDirectory']}.git && chown -R {$data['uidNumber']}:{$data['gidNumber']} {$data['homeDirectory']}.git && cd {$data['homeDirectory']} && git clone file://{$data['homeDirectory']}.git . && cp -a {$GLOBALS['CONFIG']['ROOT_VAR']}/templates/{$data['application']}/* . && cd {$data['homeDirectory']} && {$GLOBALS['CONFIG']['ROOT_BIN']}/create-manifest {$data['uid']} {$GLOBALS['CONFIG']['APP_MEMORY']} {$data['url']} {$data['framework']} {$data['runtime']} && chown -R {$data['uidNumber']} {$data['homeDirectory']} && chgrp -R {$data['gidNumber']} {$data['homeDirectory']} && chmod 770 {$data['homeDirectory']} && cd {$data['homeDirectory']} && vmc push {$data['uid']} --path ./";
+				$commands[] = "cat /root/.vmc_token.template | sed -e \"s#TOKEN#{$data['token']}#g\" > /root/.vmc_token && mkdir -p {$data['homeDirectory']} && cp -a {$GLOBALS['CONFIG']['GIT_TEMPLATE']} {$data['homeDirectory']}.git && chown -R {$data['uidNumber']}:{$data['gidNumber']} {$data['homeDirectory']}.git && cd {$data['homeDirectory']} && git clone {$data['homeDirectory']}.git .";
+				$commands[] = "cd {$data['homeDirectory']} && cp -a {$GLOBALS['CONFIG']['ROOT_VAR']}/templates/{$data['application']}/* . && {$GLOBALS['CONFIG']['ROOT_BIN']}/create-manifest {$data['uid']} {$GLOBALS['CONFIG']['APP_MEMORY']} {$data['url']} {$data['framework']} {$data['runtime']} && chown -R {$data['uidNumber']}:{$data['gidNumber']} {$data['homeDirectory']} && chmod 770 {$data['homeDirectory']} && vmc push {$data['uid']} --path ./";
 	//			$commands[] = "cat /root/.vmc_token.template | sed -e \"s#TOKEN#{$data['token']}#g\" > /root/.vmc_token && mkdir -p {$data['homeDirectory']} && cp -a {$GLOBALS['CONFIG']['ROOT_VAR']}/templates/{$data['application']}/* {$data['homeDirectory']}/ && cd {$data['homeDirectory']} && {$GLOBALS['CONFIG']['ROOT_BIN']}/create-manifest {$data['uid']} {$GLOBALS['CONFIG']['APP_MEMORY']} {$data['url']} {$data['framework']} {$data['runtime']} && chown -R {$data['uidNumber']}:{$data['gidNumber']} {$data['homeDirectory']} && chmod 770 {$data['homeDirectory']} && cd {$data['homeDirectory']} && vmc push {$data['uid']} --path ./";
 			break;
 			case self::GIT:
@@ -128,6 +129,7 @@ class system
 				$command .= " & \n";
 				$handler = new stream($this->host, $this->port);
 				$handler->send($command);
+				sleep(2);
 			}
 		}
 	}

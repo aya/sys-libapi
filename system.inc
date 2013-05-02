@@ -70,7 +70,12 @@ class system
 					$commands[] = "rm -Rf {$data['homeDirectory']}.git";
 				break;
 				case self::APP:
-					$commands[] = "cd {$data['homeDirectory']} && cd ../../dev/Apps && rm -Rf {$data['uid']}";
+					if( $data['description'] )
+					{
+						$envs = json_decode($data['description'], true);
+						foreach( $envs as $e )
+							$commands[] = "cd {$data['homeDirectory']} && cd ../../ && cd {$e} && rm -Rf Apps/{$data['uid']}";
+					}
 					$commands[] = "rm -Rf {$data['homeDirectory']}";
 					$commands[] = "rm -Rf {$data['homeDirectory']}.git";
 				break;

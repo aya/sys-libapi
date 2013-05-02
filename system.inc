@@ -101,12 +101,12 @@ class system
 				case self::APP:
 					if( $mode == 'add' )
 					{
-						$commands[] = "cd {$data['homeDirectory']} && cd ../../  && ln -s Apps/{$data['uid]} {$data['data2']['uid']}";
+						$commands[] = "cd {$data['homeDirectory']} && cd ../../  && ln -s Apps/{$data['uid']} {$data['data2']['uid']}";
 						if( $data['description'] )
 						{
 							$envs = json_decode($data['description'], true);
 							foreach( $envs as $e )
-								$commands[] = "cd {$data['homeDirectory']} && cd ../../ && cd {$e} && ln -s Apps/{$data['uid]} {$data['data2']['uid']}";
+								$commands[] = "cd {$data['homeDirectory']} && cd ../../ && cd {$e} && ln -s Apps/{$data['uid']} {$data['data2']['uid']}";
 						}
 					}
 					else if( $mode == 'delete' )

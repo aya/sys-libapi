@@ -107,7 +107,7 @@ class system
 					if( $mode == 'add' )
 					{
 						$commands[] = "cd {$data['homeDirectory']} && cd ../../  && ln -s Apps/{$data['uid']} {$data['data2']['uid']}";
-						if( count($data['homes'] > 0 )
+						if( count($data['homes']) > 0 )
 						{
 							foreach( $data['homes'] as $h )
 								$commands[] = "cd {$h} && ln -s Apps/{$data['uid']} {$data['data2']['uid']}";
@@ -116,7 +116,7 @@ class system
 					else if( $mode == 'delete' )
 					{
 						$commands[] = "cd {$data['homeDirectory']} && cd ../../  && rm {$data['data2']['uid']}";
-						if( count($data['homes'] > 0 )
+						if( count($data['homes']) > 0 )
 						{
 							foreach( $data['homes'] as $h )
 								$commands[] = "cd {$h} && rm {$data['data2']['uid']}";

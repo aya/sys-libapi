@@ -125,7 +125,7 @@ class system
 						}						
 					}
 					else if( $mode == 'add-env' )
-						$commands[] = "{$GLOBALS['CONFIG']['ROOT_BIN']}/create-env {$data['env']} {$data['uid']} {$data['homeDirectory']} {$data['uidNumber']} {$data['gidNumber']}";
+						$commands[] = "{$GLOBALS['CONFIG']['ROOT_BIN']}/create-env {$data['env']} {$data['uid']} {$data['homeDirectory']} {$data['domain']['homeDirectory']} {$data['uidNumber']} {$data['gidNumber']}";
 					else if( $mode == 'del-env' )
 						$commands[] = "{$GLOBALS['CONFIG']['ROOT_BIN']}/delete-env {$data['env']} {$data['uid']} {$data['homeDirectory']} {$data['uidNumber']} {$data['gidNumber']}";
 				break;

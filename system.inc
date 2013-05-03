@@ -107,22 +107,20 @@ class system
 					if( $mode == 'add' )
 					{
 						$commands[] = "cd {$data['homeDirectory']} && cd ../../  && ln -s Apps/{$data['uid']} {$data['data2']['uid']}";
-						if( $data['description'] )
+						if( count($data['homes'] > 0 )
 						{
-							$envs = json_decode($data['description'], true);
-							foreach( $envs as $e )
-								$commands[] = "cd {$data['homeDirectory']} && cd ../../ && cd {$e} && ln -s Apps/{$data['uid']} {$data['data2']['uid']}";
-						}
+							foreach( $data['homes'] as $h )
+								$commands[] = "cd {$h} && ln -s Apps/{$data['uid']} {$data['data2']['uid']}";
+						}		
 					}
 					else if( $mode == 'delete' )
 					{
 						$commands[] = "cd {$data['homeDirectory']} && cd ../../  && rm {$data['data2']['uid']}";
-						if( $data['description'] )
+						if( count($data['homes'] > 0 )
 						{
-							$envs = json_decode($data['description'], true);
-							foreach( $envs as $e )
-								$commands[] = "cd {$data['homeDirectory']} && cd ../../ && cd {$e} && rm {$data['data2']['uid']}";
-						}						
+							foreach( $data['homes'] as $h )
+								$commands[] = "cd {$h} && rm {$data['data2']['uid']}";
+						}
 					}
 					else if( $mode == 'add-env' )
 						$commands[] = "{$GLOBALS['CONFIG']['ROOT_BIN']}/create-env {$data['env']} {$data['uid']} {$data['homeDirectory']} {$data['domain']['homeDirectory']} {$data['uidNumber']} {$data['gidNumber']}";

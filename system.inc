@@ -9,6 +9,7 @@ class system
 	const GIT = 5;
 	const MERCURIAL = 6;
 	const SVN = 7;
+	const ALIAS = 8;
 	
 	private $host;
 	private $port;
@@ -27,6 +28,9 @@ class system
 		{
 			case self::DOMAIN:
 				$commands[] = "mkdir -p {$data['homeDirectory']} && chown root {$data['homeDirectory']} && chgrp {$data['gidNumber']} {$data['homeDirectory']} && chmod 751 {$data['homeDirectory']}";
+			break;
+			case self::ALIAS:
+				$commands[] = "ln -s {$data['source']['homeDirectory']} {$data['homeDirectory']}";
 			break;
 			case self::SUBDOMAIN:
 				//$command = "mkdir -p {$data['homeDirectory']} && chown {$data['uidNumber']} {$data['homeDirectory']} && chgrp www-data {$data['homeDirectory']} && chmod 750 {$data['homeDirectory']}";

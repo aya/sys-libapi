@@ -66,6 +66,7 @@ class alias extends ldap
 		$data['objectClass'] = $this->schema['objectClass'];
 		$data['owner'] = ($row['owner']?"{$row['owner']}":"{$GLOBALS['CONFIG']['LDAP_ADMIN']}");
 		$data['description'] = $row['source'];
+		$data['gecos'] = $row['type'];
 		
 		return $data;
 	}

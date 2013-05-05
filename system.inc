@@ -108,7 +108,7 @@ class system
 			switch( $type )
 			{		
 				case self::USER:
-					$commands[] = "cat /root/.vmc_token.template | sed -e \"s#TOKEN#{$data['token']}#g\" > {$data['homeDirectory']}/.vmc_token";
+					$commands[] = "cat /root/.vmc_token.template | sed -e \"s#TOKEN#{$data['token']}#g\" > {$data['homeDirectory']}/.vmc_token && cp /root/.vmc_target {$data['homeDirectory']}/.vmc_target && chown {$data['uidNumber']}:{$data['gidNumber']} {$data['homeDirectory']}/.vmc* && chmod 660 {$data['homeDirectory']}/.vmc*";
 				break;
 				case self::APP:
 					if( $mode == 'add' )

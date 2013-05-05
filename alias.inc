@@ -1,6 +1,6 @@
 <?php
 
-class domain extends ldap
+class alias extends ldap
 {
 	public function __construct()
 	{

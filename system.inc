@@ -54,6 +54,8 @@ class system
 
 	public function delete($type, $data)
 	{
+		$commands = array();
+		
 		if( strlen($data['homeDirectory']) > 5 )
 		{
 			switch( $type )
@@ -97,12 +99,17 @@ class system
 		}		
 	}
 	
-	public function update($type, $data, $mode)
+	public function update($type, $data, $mode = 'add')
 	{
+		$commands = array();
+		
 		if( strlen($data['homeDirectory']) > 5 )
 		{
 			switch( $type )
 			{		
+				case self::USER:
+					$commands[] = "cat /root/.vmc_token.template | sed -e \"s#TOKEN#{$data['token']}#g\" > {$data['homeDirectory']}/.vmc_token";
+				break;
 				case self::APP:
 					if( $mode == 'add' )
 					{
@@ -145,7 +152,7 @@ class system
 	
 	public function exec($commands)
 	{
-		if( is_array($commands) )
+		if( count($commands) > 0 )
 		{
 			foreach( $commands as $command )
 			{

@@ -121,9 +121,9 @@ class ldap
 		return $values;
 	}
 
-	public function search($dn, $filter, $count = false, $sort_by = 'uid', $sort = 'ASC')
+	public function search($dn, $filter, $count = false, $sort_by = 'uid', $sort = 'ASC', $scope = 'sub')
 	{
-		$search = @$this->base->search($dn, $filter, array('scope' => 'sub'));
+		$search = @$this->base->search($dn, $filter, array('scope' => $scope));
 
 		// count entries
 		if( $count === true )

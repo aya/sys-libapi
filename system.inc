@@ -30,7 +30,10 @@ class system
 				$commands[] = "mkdir -p {$data['homeDirectory']} && chown root {$data['homeDirectory']} && chgrp {$data['gidNumber']} {$data['homeDirectory']} && chmod 751 {$data['homeDirectory']}";
 			break;
 			case self::ALIAS:
-				$commands[] = "ln -s {$data['source']['homeDirectory']} {$data['homeDirectory']}";
+				if( $data['type'] == 'redirect' )
+					$commands[] = "mkdir -p {$data['homeDirectory']} && cd {$data['homeDirectory']} && echo \"RewriteEngine On\" > .htaccess  && echo \"RewriteCond %{HTTP_HOST} ^(.+)\\.".str_replace(".", "\\.", $data['associatedDomain'])."\" >> .htaccess && echo \"RewriteRule ^(.*)$ http://%1.{$data['source']}$1 [R=302,L]\" >> .htaccess";
+				else
+					$commands[] = "ln -s {$data['source']['homeDirectory']} {$data['homeDirectory']}";
 			break;
 			case self::SUBDOMAIN:
 				//$command = "mkdir -p {$data['homeDirectory']} && chown {$data['uidNumber']} {$data['homeDirectory']} && chgrp www-data {$data['homeDirectory']} && chmod 750 {$data['homeDirectory']}";

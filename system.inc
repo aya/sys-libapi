@@ -31,7 +31,7 @@ class system
 			break;
 			case self::ALIAS:
 				if( $data['type'] == 'redirect' )
-					$commands[] = "mkdir -p {$data['homeDirectory']} && cd {$data['homeDirectory']} && echo \"RewriteEngine On\" > .htaccess  && echo \"RewriteCond %{HTTP_HOST} ^(.+)\\.".str_replace(".", "\\.", $data['associatedDomain'])."\" >> .htaccess && echo \"RewriteRule ^(.*)$ http://%1.{$data['source']}$1 [R=302,L]\" >> .htaccess";
+					$commands[] = "mkdir -p {$data['homeDirectory']} && cd {$data['homeDirectory']} && echo \"RewriteEngine On\" > .htaccess  && echo \"RewriteCond %{HTTP_HOST} ^(.+)\\.".str_replace(".", "\\.", $data['associatedDomain'])."\$\" >> .htaccess && echo \"RewriteRule ^(.*)$ http://%1.{$data['source']['associatedDomain']}\$1 [R=302,L]\" >> .htaccess";
 				else
 					$commands[] = "ln -s {$data['source']['homeDirectory']} {$data['homeDirectory']}";
 			break;

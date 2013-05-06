@@ -128,7 +128,7 @@ class system
 					}
 					else if( $mode == 'delete' )
 					{
-						$commands[] = "cd {$data['homeDirectory']} && cd ../../  && rm {$data['data2']['uid']}";
+						$commands[] = "rm {$data['data2']['homeDirectory']}";
 						if( count($data['homes']) > 0 )
 						{
 							foreach( $data['homes'] as $h )

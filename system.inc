@@ -27,7 +27,7 @@ class system
 		switch( $type )
 		{
 			case self::DOMAIN:
-				$commands[] = "mkdir -p {$data['homeDirectory']} && chown root {$data['homeDirectory']} && chgrp {$data['gidNumber']} {$data['homeDirectory']} && chmod 751 {$data['homeDirectory']}";
+				$commands[] = "mkdir -p {$data['homeDirectory']} && chown root {$data['homeDirectory']} && chgrp {$data['gidNumber']} {$data['homeDirectory']} && chmod 751 {$data['homeDirectory']} && cd {$data['homeDirectory']} && echo \"RewriteEngine On\" > .htaccess  && echo \"RewriteCond %{HTTP_HOST} ^".str_replace(".", "\\.", $data['associatedDomain'])."\$\" [NC]  >> .htaccess && echo \"RewriteRule ^(.*)$ http://www.{$data['source']['associatedDomain']}\$1 [R=302,L]\" >> .htaccess";";
 			break;
 			case self::ALIAS:
 				if( $data['type'] == 'permanent' )
@@ -119,7 +119,7 @@ class system
 				case self::APP:
 					if( $mode == 'add' )
 					{
-						$commands[] = "cd {$data['homeDirectory']} && cd ../../  && ln -s Apps/{$data['uid']} {$data['data2']['uid']}";
+						$commands[] = "ln -s {$data['homeDirectory']} {$data['data2']['homeDirectory']}";
 						if( count($data['homes']) > 0 )
 						{
 							foreach( $data['homes'] as $h )

@@ -76,7 +76,7 @@ class system
 					$commands[] = "rm -Rf {$data['homeDirectory']}.git";
 				break;
 				case self::SUBDOMAIN:
-					//$commands[] = "rm -Rf {$data['homeDirectory']}";
+					$commands[] = "rm -Rf {$data['homeDirectory']}";
 				break;
 				case self::USER:
 					$commands[] = "rm -Rf {$data['homeDirectory']}";

@@ -23,29 +23,33 @@ $GLOBALS['CONFIG']['THROW_ERRORS'] 	= (E_ALL | E_STRICT) & ~E_NOTICE;
 
 switch( $_SERVER["HTTP_HOST"] )
 {
-	case 'api.dev.olympe-network.com':
-        $conf = parse_ini_file('/dns/com/olympe-network/etc/settings/api.dev.ini', true);
-        $conf['type'] = 'file';
-		break;
 	case 'api.dev.anotherservice.com':
-        $conf = parse_ini_file('/dns/com/anotherservice/etc/settings/api.dev.ini', true);
-        $conf['type'] = 'file';
-		break;
+		$conf = parse_ini_file('/dns/com/anotherservice/etc/settings/api.dev.ini', true);
+		$conf['type'] = 'file';
+	break;
 	case 'api.anotherservice.com':
 		$conf = parse_ini_file('/dns/com/anotherservice/etc/settings/api.ini', true);
-        $conf['type'] = 'vcap';
-		break;
+		$conf['type'] = 'vcap';
+	break;
 	case 'api.dev.bus-it.com':
-        $conf = parse_ini_file('/dns/com/bus-it/etc/settings/api.dev.ini', true);
-        $conf['type'] = 'file';
-		break;
+		$conf = parse_ini_file('/dns/com/bus-it/etc/settings/api.dev.ini', true);
+		$conf['type'] = 'file';
+	break;
 	case 'api.bus-it.com':
 		$conf = parse_ini_file('/dns/com/bus-it/etc/settings/api.ini', true);
-        $conf['type'] = 'vcap';
-		break;
+		$conf['type'] = 'vcap';
+	break;
+	case 'api.dev.olympe.in':
+		$conf = parse_ini_file('/dns/in/olympe/etc/settings/api.dev.ini', true);
+		$conf['type'] = 'file';
+	break;
+	case 'api.olympe.in':
+		$conf = parse_ini_file('/dns/in/olympe/etc/settings/api.ini', true);
+		$conf['type'] = 'vcap';
+	break;
 	default:
 		$conf = parse_ini_file('/dns/com/anotherservice/etc/settings/api.ini', true);
-        $conf['type'] = 'file';
+		$conf['type'] = 'file';
 }
 if( $conf['type'] == 'vcap' )
 {

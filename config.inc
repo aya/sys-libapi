@@ -27,10 +27,6 @@ switch( $_SERVER["HTTP_HOST"] )
         $conf = parse_ini_file('/dns/com/olympe-network/etc/settings/api.dev.ini', true);
         $conf['type'] = 'file';
 		break;
-	case 'api.olympe-network.com':
-		$conf = parse_ini_file('/dns/com/olympe-network/etc/settings/api.ini', true);
-        $conf['type'] = 'vcap';
-		break;
 	case 'api.dev.anotherservice.com':
         $conf = parse_ini_file('/dns/com/anotherservice/etc/settings/api.dev.ini', true);
         $conf['type'] = 'file';

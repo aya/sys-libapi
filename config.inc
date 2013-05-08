@@ -23,33 +23,33 @@ $GLOBALS['CONFIG']['THROW_ERRORS'] 	= (E_ALL | E_STRICT) & ~E_NOTICE;
 
 switch( $_SERVER["HTTP_HOST"] )
 {
-	case 'api.dev.olympe-network.com':
-        $conf = parse_ini_file('/dns/com/olympe-network/etc/settings/api.dev.ini', true);
-        $conf['type'] = 'file';
-		break;
-	case 'api.olympe-network.com':
-		$conf = parse_ini_file('/dns/com/olympe-network/etc/settings/api.ini', true);
-        $conf['type'] = 'vcap';
-		break;
 	case 'api.dev.anotherservice.com':
-        $conf = parse_ini_file('/dns/com/anotherservice/etc/settings/api.dev.ini', true);
-        $conf['type'] = 'file';
-		break;
+		$conf = parse_ini_file('/dns/com/anotherservice/etc/settings/api.dev.ini', true);
+		$conf['type'] = 'file';
+	break;
 	case 'api.anotherservice.com':
 		$conf = parse_ini_file('/dns/com/anotherservice/etc/settings/api.ini', true);
-        $conf['type'] = 'vcap';
-		break;
+		$conf['type'] = 'vcap';
+	break;
 	case 'api.dev.bus-it.com':
-        $conf = parse_ini_file('/dns/com/bus-it/etc/settings/api.dev.ini', true);
-        $conf['type'] = 'file';
-		break;
+		$conf = parse_ini_file('/dns/com/bus-it/etc/settings/api.dev.ini', true);
+		$conf['type'] = 'file';
+	break;
 	case 'api.bus-it.com':
 		$conf = parse_ini_file('/dns/com/bus-it/etc/settings/api.ini', true);
-        $conf['type'] = 'vcap';
-		break;
+		$conf['type'] = 'vcap';
+	break;
+	case 'api.dev.olympe.in':
+		$conf = parse_ini_file('/dns/in/olympe/etc/settings/api.dev.ini', true);
+		$conf['type'] = 'file';
+	break;
+	case 'api.olympe.in':
+		$conf = parse_ini_file('/dns/in/olympe/etc/settings/api.ini', true);
+		$conf['type'] = 'vcap';
+	break;
 	default:
 		$conf = parse_ini_file('/dns/com/anotherservice/etc/settings/api.ini', true);
-        $conf['type'] = 'file';
+		$conf['type'] = 'file';
 }
 if( $conf['type'] == 'vcap' )
 {
@@ -90,8 +90,14 @@ $GLOBALS['CONFIG']['GIT_TEMPLATE'] 	= $conf['Main']['GIT_TEMPLATE'];
 $GLOBALS['CONFIG']['ROOT_VAR'] 		= $conf['Main']['ROOT_VAR'];
 $GLOBALS['CONFIG']['ROOT_BIN'] 		= $conf['Main']['ROOT_BIN'];
 $GLOBALS['CONFIG']['APP_MEMORY'] 	= $conf['Main']['APP_MEMORY'];
-$GLOBALS['CONFIG']['DB_ROOT_USER']  = $conf['Main']['DB_ROOT_USER'];
-$GLOBALS['CONFIG']['DB_ROOT_PASS']  = $conf['Main']['DB_ROOT_PASS'];
+$GLOBALS['CONFIG']['MYSQL_ROOT_HOST']  = $conf['Main']['MYSQL_ROOT_HOST'];
+$GLOBALS['CONFIG']['MYSQL_ROOT_PORT']  = $conf['Main']['MYSQL_ROOT_PORT'];
+$GLOBALS['CONFIG']['MYSQL_ROOT_USER']  = $conf['Main']['MYSQL_ROOT_USER'];
+$GLOBALS['CONFIG']['MYSQL_ROOT_PASSWORD']  = $conf['Main']['MYSQL_ROOT_PASSWORD'];
+$GLOBALS['CONFIG']['PGSQL_ROOT_HOST']  = $conf['Main']['PGSQL_ROOT_HOST'];
+$GLOBALS['CONFIG']['PGSQL_ROOT_PORT']  = $conf['Main']['PGSQL_ROOT_PORT'];
+$GLOBALS['CONFIG']['PGSQL_ROOT_USER']  = $conf['Main']['PGSQL_ROOT_USER'];
+$GLOBALS['CONFIG']['PGSQL_ROOT_PASSWORD']  = $conf['Main']['PGSQL_ROOT_PASSWORD'];
 $GLOBALS['CONFIG']['A_RECORD']  	= $conf['Main']['A_RECORD'];
 $GLOBALS['CONFIG']['SYSTEM_HOST']  	= $conf['Main']['SYSTEM_HOST'];
 $GLOBALS['CONFIG']['CF_HOST']  		= $conf['Main']['CF_HOST'];

@@ -27,7 +27,7 @@ class system
 		switch( $type )
 		{
 			case self::DOMAIN:
-				if( $CONFIG['SYMLINK'] == 'yes' )
+				if( $GLOBALS['CONFIG']['SYMLINK'] == 'yes' )
 					$commands = "mkdir -p {$data['homeDirectory']} && rmdir {$data['homeDirectory']} && ln -s {$data['destination']} {$data['homeDirectory']}";
 				else
 					$commands[] = "mkdir -p {$data['homeDirectory']} && chown root:{$data['gidNumber']} {$data['homeDirectory']} && chmod 755 {$data['homeDirectory']} && cd {$data['homeDirectory']} && echo \"RewriteEngine On\" > .htaccess  && echo \"RewriteCond %{HTTP_HOST} ^".str_replace(".", "\\.", $data['associatedDomain'])."\$\" [NC]  >> .htaccess && echo \"RewriteRule ^(.*)$ http://www.{$data['associatedDomain']}/\\\$1 [QSA,L,R=301]\" >> .htaccess";
@@ -39,7 +39,7 @@ class system
 					$commands[] = "ln -s {$data['source']['homeDirectory']} {$data['homeDirectory']}";
 			break;
 			case self::SUBDOMAIN:
-				if( $CONFIG['SYMLINK'] == 'yes' )
+				if( $GLOBALS['CONFIG']['SYMLINK'] == 'yes' )
 					$command = "mkdir -p {$data['homeDirectory']} && chown {$data['uidNumber']} {$data['homeDirectory']} && chgrp www-data {$data['homeDirectory']} && chmod 750 {$data['homeDirectory']}";
 			break;
 			case self::USER:

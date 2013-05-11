@@ -27,7 +27,9 @@ class subdomain extends ldap
 		$this->schema['objectClass'][] = 'domainRelatedObject';
 		$this->schema['objectClass'][] = 'posixAccount';
 		$this->schema['objectClass'][] = 'groupOfNames';
-		
+		if( $GLOBALS['CONFIG']['SYMLINK'] == 1 )
+			$this->schema['objectClass'][] = 'inetSubscriber';
+			
 		return $this->schema;
 	}
 
@@ -45,6 +47,20 @@ class subdomain extends ldap
 		$data['cNAMERecord'] = $row['domain']; 
 		$data['loginShell'] = $GLOBALS['CONFIG']['SHELL'];
 		$data['objectClass'] = $this->schema['objectClass'];
+		
+		if( $GLOBALS['CONFIG']['SYMLINK'] == 1 && $row['domain'] == $GLOBALS['CONFIG']['DOMAIN'] )
+		{
+			$data['inetSubscriberStatus'] = 'active';
+			$data['inetAuthorizedServices'][] = 'imap';
+			$data['inetAuthorizedServices'][] = 'imaps';
+			$data['inetAuthorizedServices'][] = 'pop3';
+			$data['inetAuthorizedServices'][] = 'pop3s';
+			$data['inetAuthorizedServices'][] = 'smtp';
+			$data['inetAuthorizedServices'][] = 'smtps';
+			$data['inetAuthorizedServices'][] = 'sshd';
+			$data['host'][] = 'on-001';
+			$data['host'][] = 'on-002';
+        }
 		
 		$data['owner'] = ($row['owner']?"{$row['owner']}":"{$GLOBALS['CONFIG']['LDAP_ADMIN']}");
 		

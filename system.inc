@@ -43,7 +43,10 @@ class system
 					$commands[] = "mkdir -p {$data['homeDirectory']} && chown {$data['uidNumber']} {$data['homeDirectory']} && chgrp www-data {$data['homeDirectory']} && chmod 750 {$data['homeDirectory']}";
 			break;
 			case self::USER:
-				$commands[] = "mkdir -p {$data['homeDirectory']} && rmdir {$data['homeDirectory']} && cp -a {$GLOBALS['CONFIG']['GIT_TEMPLATE']} {$data['homeDirectory']}.git && chown -R {$data['uidNumber']}:{$data['gidNumber']} {$data['homeDirectory']}.git && chmod 770 {$data['homeDirectory']}.git && mkdir -p {$data['homeDirectory']} && cd {$data['homeDirectory']} && git clone file://{$data['homeDirectory']}.git . && chown -R {$data['uidNumber']} {$data['homeDirectory']} && chgrp -R {$data['gidNumber']} {$data['homeDirectory']} && chmod 750 {$data['homeDirectory']}";
+				if( $GLOBALS['CONFIG']['SYMLINK'] == 1 )
+					$commands[] = "mkdir -p {$data['homeDirectory']} && chown -R {$data['uidNumber']}:33 {$data['homeDirectory']} && chmod 750 {$data['homeDirectory']}";
+				else
+					$commands[] = "mkdir -p {$data['homeDirectory']} && rmdir {$data['homeDirectory']} && cp -a {$GLOBALS['CONFIG']['GIT_TEMPLATE']} {$data['homeDirectory']}.git && chown -R {$data['uidNumber']}:{$data['gidNumber']} {$data['homeDirectory']}.git && chmod 770 {$data['homeDirectory']}.git && mkdir -p {$data['homeDirectory']} && cd {$data['homeDirectory']} && git clone file://{$data['homeDirectory']}.git . && chown -R {$data['uidNumber']}:{$data['gidNumber']} {$data['homeDirectory']} && chmod 750 {$data['homeDirectory']}";
 			break;
 			case self::APP:
 				$commands[] = "{$GLOBALS['CONFIG']['ROOT_BIN']}/create-app {$data['uid']} {$data['homeDirectory']} {$data['token']} {$data['uidNumber']} {$data['gidNumber']} {$data['application']} {$GLOBALS['CONFIG']['APP_MEMORY']} {$data['url']} {$data['framework']} {$data['runtime']}";

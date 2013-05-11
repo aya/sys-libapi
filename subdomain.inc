@@ -51,12 +51,6 @@ class subdomain extends ldap
 		if( $GLOBALS['CONFIG']['SYMLINK'] == 1 && $row['domain'] == $GLOBALS['CONFIG']['DOMAIN'] )
 		{
 			$data['inetSubscriberStatus'] = 'active';
-			$data['inetAuthorizedServices'][] = 'imap';
-			$data['inetAuthorizedServices'][] = 'imaps';
-			$data['inetAuthorizedServices'][] = 'pop3';
-			$data['inetAuthorizedServices'][] = 'pop3s';
-			$data['inetAuthorizedServices'][] = 'smtp';
-			$data['inetAuthorizedServices'][] = 'smtps';
 			$data['inetAuthorizedServices'][] = 'sshd';
 			$data['host'][] = 'on-001';
 			$data['host'][] = 'on-002';

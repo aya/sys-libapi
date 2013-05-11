@@ -28,7 +28,10 @@ class subdomain extends ldap
 		$this->schema['objectClass'][] = 'posixAccount';
 		$this->schema['objectClass'][] = 'groupOfNames';
 		if( $GLOBALS['CONFIG']['SYMLINK'] == 1 )
+		{
+			$this->schema['objectClass'][] = 'posixGroup';
 			$this->schema['objectClass'][] = 'inetSubscriber';
+		}			
 			
 		return $this->schema;
 	}

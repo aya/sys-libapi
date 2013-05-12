@@ -121,9 +121,9 @@ class ldap
 		return $values;
 	}
 
-	public function search($dn, $filter, $count = false, $sort_by = 'uid', $sort = 'ASC')
+	public function search($dn, $filter, $count = false, $sort_by = 'uid', $sort = 'ASC', $scope = 'sub')
 	{
-		$search = @$this->base->search($dn, $filter, array('scope' => 'sub'));
+		$search = @$this->base->search($dn, $filter, array('scope' => $scope));
 
 		// count entries
 		if( $count === true )
@@ -164,6 +164,17 @@ class ldap
 	public function getDNfromUID($uid)
 	{
 		$filter = '(uidnumber=' . $uid . ')';
+		$entry = $GLOBALS['ldap']->search($GLOBALS['CONFIG']['LDAP_BASE'], $filter);
+		
+		if( $entry[0]['dn'] )
+			return $entry[0]['dn'];
+		else
+			return false;	
+	}
+
+	public function getDNfromHostname($hostname)
+	{
+		$filter = '(associateddomain=' . $hostname . ')';
 		$entry = $GLOBALS['ldap']->search($GLOBALS['CONFIG']['LDAP_BASE'], $filter);
 		
 		if( $entry[0]['dn'] )

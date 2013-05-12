@@ -27,7 +27,12 @@ class subdomain extends ldap
 		$this->schema['objectClass'][] = 'domainRelatedObject';
 		$this->schema['objectClass'][] = 'posixAccount';
 		$this->schema['objectClass'][] = 'groupOfNames';
-		
+		if( $GLOBALS['CONFIG']['SYMLINK'] == 1 )
+		{
+			$this->schema['objectClass'][] = 'posixGroup';
+			$this->schema['objectClass'][] = 'inetSubscriber';
+		}			
+			
 		return $this->schema;
 	}
 
@@ -36,6 +41,7 @@ class subdomain extends ldap
 		$data = array();
 		$data['uid'] = $row['uid'];
 		$data['dc'] = $row['uid'];
+		$data['userPassword'] = ($row['userPassword']?"{$row['userPassword']}":"changeme");
 		$data['uidNumber'] = $GLOBALS['ldap']->newUID();
 		$data['gidNumber'] = $data['uidNumber'];
 		$data['homeDirectory'] = ldap::dirFromDN($row['dn']);
@@ -44,6 +50,15 @@ class subdomain extends ldap
 		$data['cNAMERecord'] = $row['domain']; 
 		$data['loginShell'] = $GLOBALS['CONFIG']['SHELL'];
 		$data['objectClass'] = $this->schema['objectClass'];
+		
+		if( $GLOBALS['CONFIG']['SYMLINK'] == 1 && $row['domain'] == $GLOBALS['CONFIG']['DOMAIN'] )
+		{
+			$data['inetSubscriberStatus'] = 'active';
+			$data['inetAuthorizedServices'][] = 'sshd';
+			$data['host'][] = 'on-001';
+			$data['host'][] = 'on-002';
+        }
+		
 		$data['owner'] = ($row['owner']?"{$row['owner']}":"{$GLOBALS['CONFIG']['LDAP_ADMIN']}");
 		
 		return $data;

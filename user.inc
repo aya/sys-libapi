@@ -80,13 +80,12 @@ class user extends ldap
             $data['ipHostNumber'] = $row['ipHostNumber'];
             $data['inetAuthorizedServices'][] = 'sshd';
 			$data['owner'] = ($row['owner']?"{$row['owner']}":"{$GLOBALS['CONFIG']['LDAP_ADMIN']}");
-			$data['member'][] = ($row['owner']?"{$row['owner']}":"{$GLOBALS['CONFIG']['LDAP_ADMIN']}");
+			$data['member'] = ($row['owner']?"{$row['owner']}":"{$GLOBALS['CONFIG']['LDAP_ADMIN']}");
 			
 			if( $GLOBALS['CONFIG']['SYMLINK'] == 1 )
 			{
 				$data['host'][] = 'on-001';
 				$data['host'][] = 'on-002';
-				$data['member'][] = $GLOBALS['CONFIG']['WWW_USER']; 
 			}
 			else
 			{

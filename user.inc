@@ -52,8 +52,8 @@ class user extends ldap
 		$data['userPassword'] = ($row['userPassword']?"{$row['userPassword']}":"changeme");
 		$data['uidNumber'] = $GLOBALS['ldap']->newUID();
 		$data['gidNumber'] = $data['uidNumber'];
-		$data['givenName'] = ($row['givenName']?"{$row['givenName']}":"John");
-		$data['sn'] = ($row['sn']?"{$row['sn']}":"Doe");
+		$data['givenName'] = ($row['givenName']?"{$row['givenName']}":"{$row['uid']}");
+		$data['sn'] = ($row['sn']?"{$row['sn']}":"Olympe");
 		$data['loginShell'] = $GLOBALS['CONFIG']['SHELL'];
 		$data['mail'] = $row['uid'] . '@' . $row['domain'];
 		$data['homeDirectory'] = ldap::dirFromDN($row['dn']);
@@ -61,7 +61,7 @@ class user extends ldap
 			$data['mailForwardingAddress'] = $row['mailForwardingAddress'];
 		if( $row['gecos'] )
 			$data['gecos'] = $row['gecos'];
-		$data['cn'] = $data['givenName'] . ' ' . $data['sn'];
+		$data['cn'] = $row['uid'];
 		$data['mailQuota'] = '1G';
 		$data['mailDeliveryOption'][] = 'mailbox';
 		$data['mailDeliveryOption'][] = 'forward';

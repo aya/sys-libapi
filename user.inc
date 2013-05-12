@@ -73,14 +73,13 @@ class user extends ldap
 		$data['inetAuthorizedServices'][] = 'smtp';
 		$data['inetAuthorizedServices'][] = 'smtps';
 		$data['objectClass'] = $this->schema['objectClass'];
+		
 		if( $row['ipHostNumber'] )
         {
             $data['objectClass'][] = 'ldapPublicKey';
             $data['objectClass'][] = 'ipHost';
             $data['ipHostNumber'] = $row['ipHostNumber'];
             $data['inetAuthorizedServices'][] = 'sshd';
-			$data['owner'] = ($row['owner']?"{$row['owner']}":"{$GLOBALS['CONFIG']['LDAP_ADMIN']}");
-			$data['member'] = ($row['owner']?"{$row['owner']}":"{$GLOBALS['CONFIG']['LDAP_ADMIN']}");
 			
 			if( $GLOBALS['CONFIG']['SYMLINK'] == 1 )
 			{
@@ -94,6 +93,9 @@ class user extends ldap
 			}
         }
 		
+		$data['owner'] = ($row['owner']?"{$row['owner']}":"{$GLOBALS['CONFIG']['LDAP_ADMIN']}");
+		$data['member'] = ($row['owner']?"{$row['owner']}":"{$GLOBALS['CONFIG']['LDAP_ADMIN']}");
+			
 		return $data;
 	}
 	

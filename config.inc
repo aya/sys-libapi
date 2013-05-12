@@ -86,6 +86,7 @@ $GLOBALS['CONFIG']['SECRET'] 		= $conf['Main']['SECRET'];
 $GLOBALS['CONFIG']['GPG_KEY'] 		= $conf['Main']['GPG_KEY'];
 $GLOBALS['CONFIG']['SYMLINK'] 		= $conf['Main']['SYMLINK'];
 $GLOBALS['CONFIG']['SHELL'] 		= $conf['Main']['SHELL'];
+$GLOBALS['CONFIG']['WWW_USER'] 		= $conf['Main']['WWW_USER'];
 $GLOBALS['CONFIG']['GIT_TEMPLATE'] 	= $conf['Main']['GIT_TEMPLATE'];
 $GLOBALS['CONFIG']['ROOT_VAR'] 		= $conf['Main']['ROOT_VAR'];
 $GLOBALS['CONFIG']['ROOT_BIN'] 		= $conf['Main']['ROOT_BIN'];

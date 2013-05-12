@@ -83,6 +83,7 @@ class user extends ldap
 			{
 				$data['host'][] = 'on-001';
 				$data['host'][] = 'on-002';
+				$data['member'] = $GLOBALS['CONFIG']['WWW_USER']; 
 			}
 			else
 			{

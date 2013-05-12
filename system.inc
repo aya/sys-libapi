@@ -46,7 +46,7 @@ class system
 				if( $GLOBALS['CONFIG']['SYMLINK'] == 1 && $data['domain'] == $GLOBALS['CONFIG']['DOMAIN'] )
 					$commands[] = "mkdir -p {$data['homeDirectory']} && chown {$data['uidNumber']}:33 {$data['homeDirectory']} && chmod 770 {$data['homeDirectory']} && chmod g+s {$data['homeDirectory']}";
 				else if( $GLOBALS['CONFIG']['SYMLINK'] == 1 )
-					$commands[] = "mkdir -p {$data['homeDirectory']} && chown {$data['uidNumber']} {$data['homeDirectory']} && chmod 770 {$data['homeDirectory']}";
+					$commands[] = "mkdir -p {$data['homeDirectory']} && chown {$data['uidNumber']}:33 {$data['homeDirectory']} && chmod 770 {$data['homeDirectory']}";
 				else
 					$commands[] = "mkdir -p {$data['homeDirectory']} && chown {$data['uidNumber']}:{$data['gidNumber']} {$data['homeDirectory']} && chmod 770 {$data['homeDirectory']}";
 			break;

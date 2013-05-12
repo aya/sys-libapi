@@ -26,12 +26,7 @@ class subdomain extends ldap
 		$this->schema['objectClass'][] = 'dnsDomain';
 		$this->schema['objectClass'][] = 'domainRelatedObject';
 		$this->schema['objectClass'][] = 'posixAccount';
-		$this->schema['objectClass'][] = 'groupOfNames';
-		if( $GLOBALS['CONFIG']['SYMLINK'] == 1 )
-		{
-			$this->schema['objectClass'][] = 'posixGroup';
-			$this->schema['objectClass'][] = 'inetSubscriber';
-		}			
+		$this->schema['objectClass'][] = 'groupOfNames';	
 			
 		return $this->schema;
 	}
@@ -53,6 +48,10 @@ class subdomain extends ldap
 		
 		if( $GLOBALS['CONFIG']['SYMLINK'] == 1 && $row['domain'] == $GLOBALS['CONFIG']['DOMAIN'] )
 		{
+			$data['objectClass'][] = 'posixGroup';
+			$data['objectClass'][] = 'inetSubscriber';
+			$data['objectClass'][] = 'ldapPublicKey';
+		
 			$data['inetSubscriberStatus'] = 'active';
 			$data['inetAuthorizedServices'][] = 'sshd';
 			$data['host'][] = 'on-001';

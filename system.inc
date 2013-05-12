@@ -40,13 +40,15 @@ class system
 			break;
 			case self::SUBDOMAIN:
 				if( $GLOBALS['CONFIG']['SYMLINK'] == 1 )
-					$commands[] = "mkdir -p {$data['homeDirectory']} && chown {$data['uidNumber']} {$data['homeDirectory']} && chgrp www-data {$data['homeDirectory']} && chmod 770 {$data['homeDirectory']}";
+					$commands[] = "mkdir -p {$data['homeDirectory']} && chown {$data['uidNumber']}:{$data['user_info']['gidNumber']} {$data['homeDirectory']} && chmod 770 {$data['homeDirectory']} && chmod g+s {$data['homeDirectory']}";
 			break;
 			case self::USER:
 				if( $GLOBALS['CONFIG']['SYMLINK'] == 1 && $data['domain'] == $GLOBALS['CONFIG']['DOMAIN'] )
 					$commands[] = "mkdir -p {$data['homeDirectory']} && chown 33:{$data['gidNumber']} {$data['homeDirectory']} && chmod 770 {$data['homeDirectory']} && chmod g+s {$data['homeDirectory']}";
+				else if( $GLOBALS['CONFIG']['SYMLINK'] == 1 )
+					$commands[] = "mkdir -p {$data['homeDirectory']} && chown {$data['uidNumber']} {$data['homeDirectory']} && chmod 770 {$data['homeDirectory']}";
 				else
-					$commands[] = "mkdir -p {$data['homeDirectory']} && chown {$data['uidNumber']}:{$data['gidNumber']} {$data['homeDirectory']} && chmod 750 {$data['homeDirectory']}";
+					$commands[] = "mkdir -p {$data['homeDirectory']} && chown {$data['uidNumber']}:{$data['gidNumber']} {$data['homeDirectory']} && chmod 770 {$data['homeDirectory']}";
 			break;
 			case self::APP:
 				$commands[] = "{$GLOBALS['CONFIG']['ROOT_BIN']}/create-app {$data['uid']} {$data['homeDirectory']} {$data['token']} {$data['uidNumber']} {$data['gidNumber']} {$data['application']} {$GLOBALS['CONFIG']['APP_MEMORY']} {$data['url']} {$data['framework']} {$data['runtime']}";

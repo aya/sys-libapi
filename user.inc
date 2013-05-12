@@ -75,6 +75,7 @@ class user extends ldap
 		$data['objectClass'] = $this->schema['objectClass'];
 		if( $row['ipHostNumber'] )
         {
+            $data['objectClass'][] = 'ldapPublicKey';
             $data['objectClass'][] = 'ipHost';
             $data['ipHostNumber'] = $row['ipHostNumber'];
             $data['inetAuthorizedServices'][] = 'sshd';

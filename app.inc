@@ -40,6 +40,8 @@ class app extends ldap
 	{
 		$data = array();
 		$data['uid'] = $row['uid'];
+		if( $row['userPassword'] )
+			$data['userPassword'] = $row['userPassword'];
 		$data['uidNumber'] = $GLOBALS['ldap']->newUID();
 		$data['gidNumber'] = $data['uidNumber'];
 		$data['loginShell'] = $GLOBALS['CONFIG']['SHELL'];
@@ -54,6 +56,7 @@ class app extends ldap
 		$data['objectClass'] = $this->schema['objectClass'];
 		$data['owner'] = ($row['owner']?"{$row['owner']}":"{$GLOBALS['CONFIG']['LDAP_ADMIN']}");
 		$data['member'] = ($row['owner']?"{$row['owner']}":"{$GLOBALS['CONFIG']['LDAP_ADMIN']}");
+		
 		
 		return $data;
 	}

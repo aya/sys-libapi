@@ -30,7 +30,7 @@ class system
 				if( $GLOBALS['CONFIG']['SYMLINK'] == 1 )
 					$commands[] = "mkdir -p {$data['homeDirectory']} && rmdir {$data['homeDirectory']} && mkdir -p {$data['destination']} && ln -s {$data['destination']} {$data['homeDirectory']} && chown -h {$data['site_data']['uidNumber']}:{$data['site_data']['gidNumber']} {$data['homeDirectory']} && chown {$data['site_data']['uidNumber']} {$data['destination']} && cd {$data['homeDirectory']} && mkdir Users && chown {$data['site_data']['uidNumber']}:{$data['site_data']['gidNumber']} Users && chmod g+s Users && ln -s . www && chown -h {$data['site_data']['uidNumber']}:{$data['site_data']['gidNumber']} www";
 				else
-					$commands[] = "mkdir -p {$data['homeDirectory']} && chown root:{$data['gidNumber']} {$data['homeDirectory']} && chmod 755 {$data['homeDirectory']} && cd {$data['homeDirectory']} && echo \"RewriteEngine On\" > .htaccess  && echo \"RewriteCond %{HTTP_HOST} ^".str_replace(".", "\\.", $data['associatedDomain'])."\$\" [NC]  >> .htaccess && echo \"RewriteRule ^(.*)$ http://www.{$data['associatedDomain']}/\\\$1 [QSA,L,R=301]\" >> .htaccess";
+					$commands[] = "mkdir -p {$data['homeDirectory']} && chown {$data['uidNumber']}:{$data['gidNumber']} {$data['homeDirectory']} && chmod 755 {$data['homeDirectory']} && cd {$data['homeDirectory']} && echo \"RewriteEngine On\" > .htaccess  && echo \"RewriteCond %{HTTP_HOST} ^".str_replace(".", "\\.", $data['associatedDomain'])."\$\" [NC]  >> .htaccess && echo \"RewriteRule ^(.*)$ http://www.{$data['associatedDomain']}/\\\$1 [QSA,L,R=301]\" >> .htaccess";
 			break;
 			case self::ALIAS:
 				if( $data['type'] == 'permanent' )
@@ -39,7 +39,7 @@ class system
 					$commands[] = "ln -s {$data['source']['homeDirectory']} {$data['homeDirectory']}";
 			break;
 			case self::SUBDOMAIN:
-				if( $GLOBALS['CONFIG']['SYMLINK'] == 1 )
+				if( $GLOBALS['CONFIG']['SYMLINK'] == 1 && $data['cNAMERecord'] == $GLOBALS['CONFIG']['DOMAIN'] )
 					$commands[] = "mkdir -p {$data['homeDirectory']} && chown {$data['uidNumber']}:33 {$data['homeDirectory']} && chmod 750 {$data['homeDirectory']}";
 			break;
 			case self::USER:

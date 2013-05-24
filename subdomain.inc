@@ -36,7 +36,8 @@ class subdomain extends ldap
 		$data = array();
 		$data['uid'] = $row['uid'];
 		$data['dc'] = $row['uid'];
-		$data['userPassword'] = ($row['userPassword']?"{$row['userPassword']}":"changeme");
+		if( $row['userPassword'] )
+			$data['userPassword'] = $row['userPassword'];
 		$data['uidNumber'] = $GLOBALS['ldap']->newUID();
 		$data['gidNumber'] = $data['uidNumber'];
 		$data['homeDirectory'] = ldap::dirFromDN($row['dn']);

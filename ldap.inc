@@ -242,7 +242,7 @@ class ldap
 				$filter = '(&' . $option . '(uid=*)(objectclass=person)(!(objectclass=uidObject)))';
 			break;
 			case self::GROUP: 
-				$filter = '(&' . $option . '(uid=*)(objectclass=posixGroup)(objectclass=uidObject))';
+				$filter = '(&' . $option . '(uid=*)(objectclass=posixGroup)(objectclass=groupOfNames))';
 			break;
 			case self::APP:
 				$filter = '(&' . $option . '(cn=*)(objectclass=applicationprocess)(!(objectclass=dcobject)))';

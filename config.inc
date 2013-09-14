@@ -23,31 +23,53 @@ $GLOBALS['CONFIG']['THROW_ERRORS'] 	= (E_ALL | E_STRICT) & ~E_NOTICE;
 
 switch( $_SERVER["HTTP_HOST"] )
 {
-	case 'api.dev.olympe-network.com':
-	case 'api.olympe-network.com':
-		$conf = parse_ini_file('/dns/com/olympe-network/etc/settings/api.ini', true);
-		break;
 	case 'api.dev.anotherservice.com':
+		$conf = parse_ini_file('/dns/com/anotherservice/etc/settings/api.dev.ini', true);
+		$conf['type'] = 'file';
+	break;
 	case 'api.anotherservice.com':
 		$conf = parse_ini_file('/dns/com/anotherservice/etc/settings/api.ini', true);
-		break;
+		$conf['type'] = 'vcap';
+	break;
 	case 'api.dev.bus-it.com':
+		$conf = parse_ini_file('/dns/com/bus-it/etc/settings/api.dev.ini', true);
+		$conf['type'] = 'file';
+	break;
 	case 'api.bus-it.com':
 		$conf = parse_ini_file('/dns/com/bus-it/etc/settings/api.ini', true);
-		break;
+		$conf['type'] = 'vcap';
+	break;
+	case 'api.dev.olympe.in':
+		$conf = parse_ini_file('/dns/in/olympe/etc/settings/api.dev.ini', true);
+		$conf['type'] = 'file';
+	break;
+	case 'api.olympe.in':
+		$conf = parse_ini_file('/dns/in/olympe/etc/settings/api.ini', true);
+		$conf['type'] = 'vcap';
+	break;
 	default:
 		$conf = parse_ini_file('/dns/com/anotherservice/etc/settings/api.ini', true);
+		$conf['type'] = 'file';
 }
-
-$services_json = getenv('VCAP_SERVICES');
-$services = json_decode($services_json, true);
-$mysql_config = $services['mysql-5.1'][0]['credentials'];
-
-$GLOBALS['CONFIG']['DB_HOST'] 		= $mysql_config['hostname'];
-$GLOBALS['CONFIG']['DB_PORT'] 		= $mysql_config['port'];
-$GLOBALS['CONFIG']['DB_USERNAME'] 	= $mysql_config['user'];
-$GLOBALS['CONFIG']['DB_PASSWORD'] 	= $mysql_config['password'];
-$GLOBALS['CONFIG']['DB_DATABASE'] 	= $mysql_config['name'];
+if( $conf['type'] == 'vcap' )
+{
+    $services_json = getenv('VCAP_SERVICES');
+    $services = json_decode($services_json, true);
+    $mysql_config = $services['mysql-5.1'][0]['credentials'];
+    $GLOBALS['CONFIG']['DB_HOST']           = $mysql_config['hostname'];
+    $GLOBALS['CONFIG']['DB_PORT']           = $mysql_config['port'];
+    $GLOBALS['CONFIG']['DB_USERNAME']       = $mysql_config['user'];
+    $GLOBALS['CONFIG']['DB_PASSWORD']       = $mysql_config['password'];
+    $GLOBALS['CONFIG']['DB_DATABASE']       = $mysql_config['name'];
+}
+else
+{
+    $GLOBALS['CONFIG']['DB_HOST'] 		= $conf['Main']['MYSQL_HOST'];
+    $GLOBALS['CONFIG']['DB_PORT'] 		= $conf['Main']['MYSQL_PORT'];
+    $GLOBALS['CONFIG']['DB_USERNAME'] 	= $conf['Main']['MYSQL_USERNAME'];
+    $GLOBALS['CONFIG']['DB_PASSWORD'] 	= $conf['Main']['MYSQL_PASSWORD'];
+    $GLOBALS['CONFIG']['DB_DATABASE'] 	= $conf['Main']['MYSQL_DATABASE'];
+}
 $GLOBALS['CONFIG']['LDAP_HOST'] 	= $conf['Main']['LDAP_HOST'];
 $GLOBALS['CONFIG']['LDAP_PORT'] 	= $conf['Main']['LDAP_PORT'];
 $GLOBALS['CONFIG']['LDAP_USERNAME']	= $conf['Main']['LDAP_USERNAME'];
@@ -64,12 +86,19 @@ $GLOBALS['CONFIG']['SECRET'] 		= $conf['Main']['SECRET'];
 $GLOBALS['CONFIG']['GPG_KEY'] 		= $conf['Main']['GPG_KEY'];
 $GLOBALS['CONFIG']['SYMLINK'] 		= $conf['Main']['SYMLINK'];
 $GLOBALS['CONFIG']['SHELL'] 		= $conf['Main']['SHELL'];
+$GLOBALS['CONFIG']['WWW_USER'] 		= $conf['Main']['WWW_USER'];
 $GLOBALS['CONFIG']['GIT_TEMPLATE'] 	= $conf['Main']['GIT_TEMPLATE'];
 $GLOBALS['CONFIG']['ROOT_VAR'] 		= $conf['Main']['ROOT_VAR'];
 $GLOBALS['CONFIG']['ROOT_BIN'] 		= $conf['Main']['ROOT_BIN'];
 $GLOBALS['CONFIG']['APP_MEMORY'] 	= $conf['Main']['APP_MEMORY'];
-$GLOBALS['CONFIG']['DB_ROOT_USER']  = $conf['Main']['DB_ROOT_USER'];
-$GLOBALS['CONFIG']['DB_ROOT_PASS']  = $conf['Main']['DB_ROOT_PASS'];
+$GLOBALS['CONFIG']['MYSQL_ROOT_HOST']  = $conf['Main']['MYSQL_ROOT_HOST'];
+$GLOBALS['CONFIG']['MYSQL_ROOT_PORT']  = $conf['Main']['MYSQL_ROOT_PORT'];
+$GLOBALS['CONFIG']['MYSQL_ROOT_USER']  = $conf['Main']['MYSQL_ROOT_USER'];
+$GLOBALS['CONFIG']['MYSQL_ROOT_PASSWORD']  = $conf['Main']['MYSQL_ROOT_PASSWORD'];
+$GLOBALS['CONFIG']['PGSQL_ROOT_HOST']  = $conf['Main']['PGSQL_ROOT_HOST'];
+$GLOBALS['CONFIG']['PGSQL_ROOT_PORT']  = $conf['Main']['PGSQL_ROOT_PORT'];
+$GLOBALS['CONFIG']['PGSQL_ROOT_USER']  = $conf['Main']['PGSQL_ROOT_USER'];
+$GLOBALS['CONFIG']['PGSQL_ROOT_PASSWORD']  = $conf['Main']['PGSQL_ROOT_PASSWORD'];
 $GLOBALS['CONFIG']['A_RECORD']  	= $conf['Main']['A_RECORD'];
 $GLOBALS['CONFIG']['SYSTEM_HOST']  	= $conf['Main']['SYSTEM_HOST'];
 $GLOBALS['CONFIG']['CF_HOST']  		= $conf['Main']['CF_HOST'];

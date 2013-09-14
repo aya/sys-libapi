@@ -9,6 +9,7 @@ class system
 	const GIT = 5;
 	const MERCURIAL = 6;
 	const SVN = 7;
+	const ALIAS = 8;
 	
 	private $host;
 	private $port;
@@ -26,26 +27,41 @@ class system
 		switch( $type )
 		{
 			case self::DOMAIN:
-				$commands[] = "mkdir -p {$data['homeDirectory']} && chown root {$data['homeDirectory']} && chgrp {$data['gidNumber']} {$data['homeDirectory']} && chmod 751 {$data['homeDirectory']}";
+				if( $GLOBALS['CONFIG']['SYMLINK'] == 1 )
+					$commands[] = "mkdir -p {$data['homeDirectory']} && rmdir {$data['homeDirectory']} && mkdir -p {$data['destination']} && ln -s {$data['destination']} {$data['homeDirectory']} && chown -h {$data['site_data']['uidNumber']}:{$data['site_data']['gidNumber']} {$data['homeDirectory']} && chown {$data['site_data']['uidNumber']} {$data['destination']} && cd {$data['homeDirectory']} && mkdir Users && chown {$data['site_data']['uidNumber']}:{$data['site_data']['gidNumber']} Users && chmod g+s Users && ln -s . www && chown -h {$data['site_data']['uidNumber']}:{$data['site_data']['gidNumber']} www";
+				else
+					$commands[] = "mkdir -p {$data['homeDirectory']} && chown {$data['uidNumber']}:{$data['gidNumber']} {$data['homeDirectory']} && chmod 755 {$data['homeDirectory']} && cd {$data['homeDirectory']} && echo \"RewriteEngine On\" > .htaccess  && echo \"RewriteCond %{HTTP_HOST} ^".str_replace(".", "\\.", $data['associatedDomain'])."\$\" [NC]  >> .htaccess && echo \"RewriteRule ^(.*)$ http://www.{$data['associatedDomain']}/\\\$1 [QSA,L,R=301]\" >> .htaccess";
+			break;
+			case self::ALIAS:
+				if( $data['type'] == 'permanent' )
+					$commands[] = "mkdir -p {$data['homeDirectory']} && cd {$data['homeDirectory']} && echo \"RewriteEngine On\" > .htaccess && echo \"RewriteCond %{HTTP_HOST} ^".str_replace(".", "\\.", $data['associatedDomain'])."\$\" [NC]  >> .htaccess && echo \"RewriteRule ^(.*)$ http://www.{$data['associatedDomain']}/\\\$1 [R=302,L]\" >> .htaccess && echo \"RewriteCond %{HTTP_HOST} ^(.+)\\.".str_replace(".", "\\.", $data['associatedDomain'])."\$\" >> .htaccess && echo \"RewriteRule ^(.*)$ http://%1.{$data['source']['associatedDomain']} [QSA,L,R=301]\" >> .htaccess";
+				else
+					$commands[] = "ln -s {$data['source']['homeDirectory']} {$data['homeDirectory']}";
 			break;
 			case self::SUBDOMAIN:
-				//$command = "mkdir -p {$data['homeDirectory']} && chown {$data['uidNumber']} {$data['homeDirectory']} && chgrp www-data {$data['homeDirectory']} && chmod 750 {$data['homeDirectory']}";
+				if( $GLOBALS['CONFIG']['SYMLINK'] == 1 && $data['cNAMERecord'] == $GLOBALS['CONFIG']['DOMAIN'] )
+					$commands[] = "mkdir -p {$data['homeDirectory']} && chown {$data['uidNumber']}:33 {$data['homeDirectory']} && chmod 750 {$data['homeDirectory']}";
 			break;
 			case self::USER:
-				$commands[] = "mkdir -p {$data['homeDirectory']} && rmdir {$data['homeDirectory']} && cp -a {$GLOBALS['CONFIG']['GIT_TEMPLATE']} {$data['homeDirectory']}.git && chown -R {$data['uidNumber']}:{$data['gidNumber']} {$data['homeDirectory']}.git && chmod 770 {$data['homeDirectory']}.git && mkdir -p {$data['homeDirectory']} && cd {$data['homeDirectory']} && git clone file://{$data['homeDirectory']}.git . && chown -R {$data['uidNumber']} {$data['homeDirectory']} && chgrp -R {$data['gidNumber']} {$data['homeDirectory']} && chmod 750 {$data['homeDirectory']}";
+				if( $GLOBALS['CONFIG']['SYMLINK'] == 1 && $data['ipHostNumber'] )
+					$commands[] = "mkdir -p {$data['homeDirectory']} && chown 33:{$data['gidNumber']} {$data['homeDirectory']} && chmod 770 {$data['homeDirectory']} && chmod g+s {$data['homeDirectory']}";
+				else if( $GLOBALS['CONFIG']['SYMLINK'] == 1 )
+					$commands[] = "mkdir -p {$data['homeDirectory']} && chown {$data['uidNumber']}:33 {$data['homeDirectory']} && chmod 770 {$data['homeDirectory']} && chmod g+s {$data['homeDirectory']}";
+				else
+					$commands[] = "mkdir -p {$data['homeDirectory']} && chown {$data['uidNumber']}:{$data['gidNumber']} {$data['homeDirectory']} && chmod 770 {$data['homeDirectory']}";
 			break;
 			case self::APP:
-//				$commands[] = "cat /root/.vmc_token.template | sed -e \"s#TOKEN#{$data['token']}#g\" > /root/.vmc_token && mkdir -p {$data['homeDirectory']} && cp -a {$GLOBALS['CONFIG']['GIT_TEMPLATE']} {$data['homeDirectory']}.git && chown -R {$data['uidNumber']}:{$data['gidNumber']} {$data['homeDirectory']}.git && cd {$data['homeDirectory']} && git clone file://{$data['homeDirectory']}.git . && cp -a {$GLOBALS['CONFIG']['ROOT_VAR']}/templates/{$data['application']}/* . && cd {$data['homeDirectory']} && {$GLOBALS['CONFIG']['ROOT_BIN']}/create-manifest {$data['uid']} {$GLOBALS['CONFIG']['APP_MEMORY']} {$data['url']} {$data['framework']} {$data['runtime']} && chown -R {$data['uidNumber']} {$data['homeDirectory']} && chgrp -R {$data['gidNumber']} {$data['homeDirectory']} && chmod 770 {$data['homeDirectory']} && cd {$data['homeDirectory']} && vmc push {$data['uid']} --path ./";
-				$commands[] = "cat /root/.vmc_token.template | sed -e \"s#TOKEN#{$data['token']}#g\" > /root/.vmc_token && mkdir -p {$data['homeDirectory']} && cp -a {$GLOBALS['CONFIG']['ROOT_VAR']}/templates/{$data['application']}/* {$data['homeDirectory']}/ && cd {$data['homeDirectory']} && {$GLOBALS['CONFIG']['ROOT_BIN']}/create-manifest {$data['uid']} {$GLOBALS['CONFIG']['APP_MEMORY']} {$data['url']} {$data['framework']} {$data['runtime']} && chown -R {$data['uidNumber']}:{$data['gidNumber']} {$data['homeDirectory']} && chmod 770 {$data['homeDirectory']} && cd {$data['homeDirectory']} && vmc push {$data['uid']} --path ./";
+				$commands[] = "{$GLOBALS['CONFIG']['ROOT_BIN']}/create-app {$data['uid']} {$data['homeDirectory']} {$data['token']} {$data['uidNumber']} {$data['gidNumber']} {$data['application']} {$GLOBALS['CONFIG']['APP_MEMORY']} {$data['url']} {$data['framework']} {$data['runtime']}";
+				$commands[] = "sleep 5 && cd {$data['homeDirectory']} && vmc push {$data['uid']} --path ./";
 			break;
 			case self::GIT:
-				$commands[] = "mkdir -p {$data['homeDirectory']} && cd {$data['homeDirectory']} && cp -a {$GLOBALS['CONFIG']['GIT_TEMPLATE']}/* {$data['homeDirectory']}/ && chown -R {$data['uidNumber']}:{$data['uidNumber']} {$data['homeDirectory']} && chmod 770 {$data['homeDirectory']} && chmod -R g+w {$data['homeDirectory']} && find {$data['homeDirectory']} -type d -exec chmod g+s {} \;";
+				$commands[] = "mkdir -p {$data['homeDirectory']} && cd {$data['homeDirectory']} && cp -a {$GLOBALS['CONFIG']['GIT_TEMPLATE']}/* {$data['homeDirectory']}/ && chown -R {$data['uidNumber']}:{$data['uidNumber']} {$data['homeDirectory']} && chmod 770 {$data['homeDirectory']} && chmod -R g+w {$data['homeDirectory']} && find {$data['homeDirectory']} -type d -exec chmod g+s {} \; && cd {$data['homeDirectory']} && cd .. && ln -s {$data['uid']} {$data['description']}";
 			break;
 			case self::MERCURIAL:
-				$commands[] = "mkdir -p {$data['homeDirectory']} && cd {$data['homeDirectory']} && hg init && chown -R {$data['uidNumber']}:{$data['uidNumber']} {$data['homeDirectory']} && chmod 770 {$data['homeDirectory']} && chmod -R g+w {$data['homeDirectory']} && find {$data['homeDirectory']} -type d -exec chmod g+s {} \;";
+				$commands[] = "mkdir -p {$data['homeDirectory']} && cd {$data['homeDirectory']} && hg init && chown -R {$data['uidNumber']}:{$data['uidNumber']} {$data['homeDirectory']} && chmod 770 {$data['homeDirectory']} && chmod -R g+w {$data['homeDirectory']} && find {$data['homeDirectory']} -type d -exec chmod g+s {} \; && cd {$data['homeDirectory']} && cd .. && ln -s {$data['uid']} {$data['description']}";
 			break;
 			case self::SVN:
-				$commands[] = "mkdir -p {$data['homeDirectory']} && rmdir {$data['homeDirectory']} && svnadmin create {$data['homeDirectory']} && chown -R {$data['uidNumber']}:{$data['uidNumber']} {$data['homeDirectory']} && chmod 770 {$data['homeDirectory']} && chmod -R g+w {$data['homeDirectory']} && find {$data['homeDirectory']} -type d -exec chmod g+s {} \;";
+				$commands[] = "mkdir -p {$data['homeDirectory']} && rmdir {$data['homeDirectory']} && svnadmin create {$data['homeDirectory']} && chown -R {$data['uidNumber']}:{$data['uidNumber']} {$data['homeDirectory']} && chmod 770 {$data['homeDirectory']} && chmod -R g+w {$data['homeDirectory']} && find {$data['homeDirectory']} -type d -exec chmod g+s {} \; && cd {$data['homeDirectory']} && cd .. && ln -s {$data['uid']} {$data['description']}";
 			break;
 		}
 		
@@ -54,6 +70,8 @@ class system
 
 	public function delete($type, $data)
 	{
+		$commands = array();
+		
 		if( strlen($data['homeDirectory']) > 5 )
 		{
 			switch( $type )
@@ -63,23 +81,32 @@ class system
 					$commands[] = "rm -Rf {$data['homeDirectory']}.git";
 				break;
 				case self::SUBDOMAIN:
-					//$commands[] = "rm -Rf {$data['homeDirectory']}";
+					$commands[] = "rm -Rf {$data['homeDirectory']}";
 				break;
 				case self::USER:
 					$commands[] = "rm -Rf {$data['homeDirectory']}";
 					$commands[] = "rm -Rf {$data['homeDirectory']}.git";
 				break;
 				case self::APP:
+					if( $data['description'] )
+					{
+						$envs = json_decode($data['description'], true);
+						foreach( $envs as $e )
+							$commands[] = "cd {$data['homeDirectory']} && cd ../../ && cd {$e} && rm -Rf Apps/{$data['uid']}";
+					}
 					$commands[] = "rm -Rf {$data['homeDirectory']}";
 					$commands[] = "rm -Rf {$data['homeDirectory']}.git";
 				break;
 				case self::GIT:
+					$commands[] = "cd {$data['homeDirectory']} && cd .. && rm {$data['description']}";
 					$commands[] = "rm -Rf {$data['homeDirectory']}";
 				break;
 				case self::MERCURIAL:
+					$commands[] = "cd {$data['homeDirectory']} && cd .. && rm {$data['description']}";
 					$commands[] = "rm -Rf {$data['homeDirectory']}";
 				break;
 				case self::SVN:
+					$commands[] = "cd {$data['homeDirectory']} && cd .. && rm {$data['description']}";
 					$commands[] = "rm -Rf {$data['homeDirectory']}";
 				break;
 			}
@@ -87,10 +114,51 @@ class system
 			$this->exec($commands);
 		}		
 	}
-
-	public function getquota($uidnumber)
+	
+	public function update($type, $data, $mode = 'add')
 	{
-		$command = "/dns/tm/sys/usr/local/bin/getuse {$uidnumber}\n";
+		$commands = array();
+		
+		if( strlen($data['homeDirectory']) > 5 )
+		{
+			switch( $type )
+			{		
+				case self::USER:
+					$commands[] = "cat /root/.vmc_token.template | sed -e \"s#TOKEN#{$data['token']}#g\" > {$data['homeDirectory']}/.vmc_token && cp /root/.vmc_target {$data['homeDirectory']}/.vmc_target && chown {$data['uidNumber']}:{$data['gidNumber']} {$data['homeDirectory']}/.vmc* && chmod 660 {$data['homeDirectory']}/.vmc*";
+				break;
+				case self::APP:
+					if( $mode == 'add' )
+					{
+						$commands[] = "ln -s {$data['homeDirectory']} {$data['data2']['homeDirectory']}";
+						if( count($data['homes']) > 0 )
+						{
+							foreach( $data['homes'] as $h )
+								$commands[] = "cd {$h} && ln -s Apps/{$data['uid']} {$data['data2']['uid']}";
+						}		
+					}
+					else if( $mode == 'delete' )
+					{
+						$commands[] = "rm {$data['data2']['homeDirectory']}";
+						if( count($data['homes']) > 0 )
+						{
+							foreach( $data['homes'] as $h )
+								$commands[] = "cd {$h} && rm {$data['data2']['uid']}";
+						}
+					}
+					else if( $mode == 'add-env' )
+						$commands[] = "{$GLOBALS['CONFIG']['ROOT_BIN']}/create-env {$data['env']} {$data['uid']} {$data['homeDirectory']} {$data['domain']['homeDirectory']} {$data['uidNumber']} {$data['gidNumber']}";
+					else if( $mode == 'del-env' )
+						$commands[] = "{$GLOBALS['CONFIG']['ROOT_BIN']}/delete-env {$data['env']} {$data['uid']} {$data['homeDirectory']} {$data['domain']['homeDirectory']} {$data['uidNumber']} {$data['gidNumber']}";
+				break;
+			}
+			
+			$this->exec($commands);
+		}		
+	}	
+
+	public function getquota($uidnumber, $type = 'group')
+	{
+		$command = "/dns/tm/sys/usr/local/bin/getuse {$uidnumber} {$type}\n";
 		$handler = new stream($this->host, $this->port);
 		$handler->send($command);
 		$result = $handler->recv(1);
@@ -100,13 +168,14 @@ class system
 	
 	public function exec($commands)
 	{
-		if( is_array($commands) )
+		if( count($commands) > 0 )
 		{
 			foreach( $commands as $command )
 			{
 				$command .= " & \n";
 				$handler = new stream($this->host, $this->port);
 				$handler->send($command);
+				sleep(2);
 			}
 		}
 	}

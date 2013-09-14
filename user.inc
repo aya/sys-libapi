@@ -25,6 +25,9 @@ class user extends ldap
 		$this->schema[] = 'mailAlternateAddress';
 		$this->schema[] = 'mailForwardingAddress';
 		$this->schema[] = 'mailHost';
+		$this->schema[] = 'inetSubscriberStatus';
+		$this->schema[] = 'inetAuthorizedServices';
+		$this->schema[] = 'host';
 		$this->schema[] = 'preferredLanguage';
 		$this->schema[] = 'description';
 		$this->schema[] = 'gecos';
@@ -37,6 +40,7 @@ class user extends ldap
 		$this->schema['objectClass'][] = 'posixGroup';
 		$this->schema['objectClass'][] = 'mailRecipient';
 		$this->schema['objectClass'][] = 'groupOfNames';
+		$this->schema['objectClass'][] = 'inetSubscriber';
 		
 		return $this->schema;
 	}
@@ -45,11 +49,12 @@ class user extends ldap
 	{
 		$data = array();
 		$data['uid'] = $row['uid'];
-		$data['userPassword'] = ($row['userPassword']?"{$row['userPassword']}":"changeme");
+		if( $row['userPassword'] )
+			$data['userPassword'] = $row['userPassword'];
 		$data['uidNumber'] = $GLOBALS['ldap']->newUID();
 		$data['gidNumber'] = $data['uidNumber'];
-		$data['givenName'] = ($row['givenName']?"{$row['givenName']}":"John");
-		$data['sn'] = ($row['sn']?"{$row['sn']}":"Doe");
+		$data['givenName'] = ($row['givenName']?"{$row['givenName']}":"{$row['uid']}");
+		$data['sn'] = ($row['sn']?"{$row['sn']}":"Olympe");
 		$data['loginShell'] = $GLOBALS['CONFIG']['SHELL'];
 		$data['mail'] = $row['uid'] . '@' . $row['domain'];
 		$data['homeDirectory'] = ldap::dirFromDN($row['dn']);
@@ -57,14 +62,41 @@ class user extends ldap
 			$data['mailForwardingAddress'] = $row['mailForwardingAddress'];
 		if( $row['gecos'] )
 			$data['gecos'] = $row['gecos'];
-		$data['cn'] = $data['givenName'] . ' ' . $data['sn'];
-		$data['mailQuota'] = '100M';
+		$data['cn'] = $row['uid'];
+		$data['mailQuota'] = '1G';
 		$data['mailDeliveryOption'][] = 'mailbox';
 		$data['mailDeliveryOption'][] = 'forward';
+		$data['inetSubscriberStatus'] = 'active';
+		$data['inetAuthorizedServices'][] = 'imap';
+		$data['inetAuthorizedServices'][] = 'imaps';
+		$data['inetAuthorizedServices'][] = 'pop3';
+		$data['inetAuthorizedServices'][] = 'pop3s';
+		$data['inetAuthorizedServices'][] = 'smtp';
+		$data['inetAuthorizedServices'][] = 'smtps';
 		$data['objectClass'] = $this->schema['objectClass'];
+		
+		if( $row['ipHostNumber'] )
+        {
+            $data['objectClass'][] = 'ldapPublicKey';
+            $data['objectClass'][] = 'ipHost';
+            $data['ipHostNumber'] = $row['ipHostNumber'];
+            $data['inetAuthorizedServices'][] = 'sshd';
+			
+			if( $GLOBALS['CONFIG']['SYMLINK'] == 1 )
+			{
+				$data['host'][] = 'on-001';
+				$data['host'][] = 'on-002';
+			}
+			else
+			{
+				$data['host'][] = 'proxy-001';
+				$data['host'][] = 'proxy-002';
+			}
+        }
+		
 		$data['owner'] = ($row['owner']?"{$row['owner']}":"{$GLOBALS['CONFIG']['LDAP_ADMIN']}");
 		$data['member'] = ($row['owner']?"{$row['owner']}":"{$GLOBALS['CONFIG']['LDAP_ADMIN']}");
-		
+			
 		return $data;
 	}
 	

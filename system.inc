@@ -28,7 +28,10 @@ class system
 		{
 			case self::DOMAIN:
 				if( $GLOBALS['CONFIG']['SYMLINK'] == 1 )
+                {
 					$commands[] = "mkdir -p {$data['homeDirectory']} && rmdir {$data['homeDirectory']} && mkdir -p {$data['destination']} && ln -s {$data['destination']} {$data['homeDirectory']} && chown -h {$data['site_data']['uidNumber']}:{$data['site_data']['gidNumber']} {$data['homeDirectory']} && chown {$data['site_data']['uidNumber']} {$data['destination']} && cd {$data['homeDirectory']} && mkdir Users && chown {$data['site_data']['uidNumber']}:{$data['site_data']['gidNumber']} Users && chmod g+s Users && ln -s . www && chown -h {$data['site_data']['uidNumber']}:{$data['site_data']['gidNumber']} www";
+                    $commands[] = "setfacl -m group:{$data['gidNumber']}:x {$data['site_data']['homeDirectory']}";
+                }
 				else
 					$commands[] = "mkdir -p {$data['homeDirectory']} && chown {$data['uidNumber']}:{$data['gidNumber']} {$data['homeDirectory']} && chmod 755 {$data['homeDirectory']} && cd {$data['homeDirectory']} && echo \"RewriteEngine On\" > .htaccess  && echo \"RewriteCond %{HTTP_HOST} ^".str_replace(".", "\\.", $data['associatedDomain'])."\$\" [NC]  >> .htaccess && echo \"RewriteRule ^(.*)$ http://www.{$data['associatedDomain']}/\\\$1 [QSA,L,R=301]\" >> .htaccess";
 			break;
@@ -79,6 +82,7 @@ class system
 				case self::DOMAIN:
 					$commands[] = "rm -Rf {$data['homeDirectory']}";
 					$commands[] = "rm -Rf {$data['homeDirectory']}.git";
+                    $commands[] = "setfacl -x group:{$data['gidNumber']} ".implode(' ', $data['group']['homeDirectory']);
 				break;
 				case self::SUBDOMAIN:
 					$commands[] = "rm -Rf {$data['homeDirectory']}";

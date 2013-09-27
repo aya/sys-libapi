@@ -29,7 +29,7 @@ switch( $_SERVER["HTTP_HOST"] )
 	break;
 	case 'api.anotherservice.com':
 		$conf = parse_ini_file('/dns/com/anotherservice/etc/settings/api.ini', true);
-		$conf['type'] = 'vcap';
+		$conf['type'] = 'file';
 	break;
 	case 'api.dev.bus-it.com':
 		$conf = parse_ini_file('/dns/com/bus-it/etc/settings/api.dev.ini', true);
@@ -37,7 +37,7 @@ switch( $_SERVER["HTTP_HOST"] )
 	break;
 	case 'api.bus-it.com':
 		$conf = parse_ini_file('/dns/com/bus-it/etc/settings/api.ini', true);
-		$conf['type'] = 'vcap';
+		$conf['type'] = 'file';
 	break;
 	case 'api.dev.olympe.in':
 		$conf = parse_ini_file('/dns/in/olympe/etc/settings/api.dev.ini', true);
@@ -45,13 +45,14 @@ switch( $_SERVER["HTTP_HOST"] )
 	break;
 	case 'api.olympe.in':
 		$conf = parse_ini_file('/dns/in/olympe/etc/settings/api.ini', true);
-		$conf['type'] = 'vcap';
+		$conf['type'] = 'file';
 	break;
 	default:
 		$conf = parse_ini_file('/dns/com/anotherservice/etc/settings/api.ini', true);
 		$conf['type'] = 'file';
 }
-if( $conf['type'] == 'vcap' )
+
+if( $conf['type'] == 'env' )
 {
     $services_json = getenv('VCAP_SERVICES');
     $services = json_decode($services_json, true);
@@ -70,6 +71,7 @@ else
     $GLOBALS['CONFIG']['DB_PASSWORD'] 	= $conf['Main']['MYSQL_PASSWORD'];
     $GLOBALS['CONFIG']['DB_DATABASE'] 	= $conf['Main']['MYSQL_DATABASE'];
 }
+
 $GLOBALS['CONFIG']['LDAP_HOST'] 	= $conf['Main']['LDAP_HOST'];
 $GLOBALS['CONFIG']['LDAP_PORT'] 	= $conf['Main']['LDAP_PORT'];
 $GLOBALS['CONFIG']['LDAP_USERNAME']	= $conf['Main']['LDAP_USERNAME'];
@@ -86,7 +88,6 @@ $GLOBALS['CONFIG']['SECRET'] 		= $conf['Main']['SECRET'];
 $GLOBALS['CONFIG']['GPG_KEY'] 		= $conf['Main']['GPG_KEY'];
 $GLOBALS['CONFIG']['SYMLINK'] 		= $conf['Main']['SYMLINK'];
 $GLOBALS['CONFIG']['SHELL'] 		= $conf['Main']['SHELL'];
-$GLOBALS['CONFIG']['WWW_USER'] 		= $conf['Main']['WWW_USER'];
 $GLOBALS['CONFIG']['GIT_TEMPLATE'] 	= $conf['Main']['GIT_TEMPLATE'];
 $GLOBALS['CONFIG']['ROOT_VAR'] 		= $conf['Main']['ROOT_VAR'];
 $GLOBALS['CONFIG']['ROOT_BIN'] 		= $conf['Main']['ROOT_BIN'];

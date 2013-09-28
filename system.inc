@@ -30,7 +30,7 @@ class system
 				if( $GLOBALS['CONFIG']['SYMLINK'] == 1 )
 					$commands[] = "mkdir -p {$data['homeDirectory']} && rmdir {$data['homeDirectory']} && mkdir -p {$data['destination']} && ln -s {$data['destination']} {$data['homeDirectory']} && chown -h {$data['site_data']['uidNumber']}:{$data['site_data']['gidNumber']} {$data['homeDirectory']} && chown {$data['site_data']['uidNumber']} {$data['destination']} && cd {$data['homeDirectory']} && mkdir Users && chown {$data['site_data']['uidNumber']}:{$data['site_data']['gidNumber']} Users && chmod g+s Users && ln -s . www && chown -h {$data['site_data']['uidNumber']}:{$data['site_data']['gidNumber']} www";
 				else
-					$commands[] = "mkdir -p {$data['homeDirectory']} && chown {$data['uidNumber']}:{$data['gidNumber']} {$data['homeDirectory']} && chmod 755 {$data['homeDirectory']} && cd {$data['homeDirectory']} && echo \"RewriteEngine On\" > .htaccess  && echo \"RewriteCond %{HTTP_HOST} ^".str_replace(".", "\\.", $data['associatedDomain'])."\$\" [NC]  >> .htaccess && echo \"RewriteRule ^(.*)$ http://www.{$data['associatedDomain']}/\\\$1 [QSA,L,R=301]\" >> .htaccess";
+					$commands[] = "mkdir -p {$data['homeDirectory']} && chown {$data['uidNumber']}:{$data['gidNumber']} {$data['homeDirectory']} && chmod 751 {$data['homeDirectory']} && cd {$data['homeDirectory']} && echo \"RewriteEngine On\" > .htaccess  && echo \"RewriteCond %{HTTP_HOST} ^".str_replace(".", "\\.", $data['associatedDomain'])."\$\" [NC]  >> .htaccess && echo \"RewriteRule ^(.*)$ http://www.{$data['associatedDomain']}/\\\$1 [QSA,L,R=301]\" >> .htaccess";
 			break;
 			case self::ALIAS:
 				if( $data['type'] == 'permanent' )
@@ -87,12 +87,6 @@ class system
 					$commands[] = "rm -Rf {$data['homeDirectory']}.git";
 				break;
 				case self::APP:
-					if( $data['description'] )
-					{
-						$envs = json_decode($data['description'], true);
-						foreach( $envs as $e )
-							$commands[] = "cd {$data['homeDirectory']} && cd ../../ && cd {$e} && rm -Rf Apps/{$data['uid']}";
-					}
 					$commands[] = "rm -Rf {$data['homeDirectory']}";
 					$commands[] = "rm -Rf {$data['homeDirectory']}.git";
 				break;
@@ -127,27 +121,9 @@ class system
 				break;
 				case self::APP:
 					if( $mode == 'add' )
-					{
 						$commands[] = "ln -s {$data['homeDirectory']} {$data['data2']['homeDirectory']}";
-						if( count($data['homes']) > 0 )
-						{
-							foreach( $data['homes'] as $h )
-								$commands[] = "cd {$h} && ln -s Apps/{$data['uid']} {$data['data2']['uid']}";
-						}		
-					}
 					else if( $mode == 'delete' )
-					{
 						$commands[] = "rm {$data['data2']['homeDirectory']}";
-						if( count($data['homes']) > 0 )
-						{
-							foreach( $data['homes'] as $h )
-								$commands[] = "cd {$h} && rm {$data['data2']['uid']}";
-						}
-					}
-					else if( $mode == 'add-env' )
-						$commands[] = "{$GLOBALS['CONFIG']['ROOT_BIN']}/create-env {$data['env']} {$data['uid']} {$data['homeDirectory']} {$data['domain']['homeDirectory']} {$data['uidNumber']} {$data['gidNumber']}";
-					else if( $mode == 'del-env' )
-						$commands[] = "{$GLOBALS['CONFIG']['ROOT_BIN']}/delete-env {$data['env']} {$data['uid']} {$data['homeDirectory']} {$data['domain']['homeDirectory']} {$data['uidNumber']} {$data['gidNumber']}";
 				break;
 			}
 			

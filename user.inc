@@ -54,7 +54,7 @@ class user extends ldap
 		$data['uidNumber'] = $GLOBALS['ldap']->newUID();
 		$data['gidNumber'] = $data['uidNumber'];
 		$data['givenName'] = ($row['givenName']?"{$row['givenName']}":"{$row['uid']}");
-		$data['sn'] = ($row['sn']?"{$row['sn']}":"Olympe");
+		$data['sn'] = ($row['sn']?"{$row['sn']}":"Unkown");
 		$data['loginShell'] = $GLOBALS['CONFIG']['SHELL'];
 		$data['mail'] = $row['uid'] . '@' . $row['domain'];
 		$data['homeDirectory'] = ldap::dirFromDN($row['dn']);

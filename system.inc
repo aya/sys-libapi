@@ -131,9 +131,9 @@ class system
 		}		
 	}	
 
-	public function getquota($uidnumber, $type = 'group')
+	public function getquota($directory)
 	{
-		$command = "/dns/tm/sys/usr/local/bin/getuse {$uidnumber} {$type}\n";
+		$command = "/dns/tm/sys/usr/local/bin/getuse {$directory}\n";
 		$handler = new stream($this->host, $this->port);
 		$handler->send($command);
 		$result = $handler->recv(1);

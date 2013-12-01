@@ -22,7 +22,7 @@ class system
 
 	public function getquota($uidnumber, $type = 'group')
 	{
-		$command = "getuse {$uidnumber} {$type}\n";
+		$command = "/dns/tm/sys/usr/local/bin/getuse {$uidnumber} {$type}\n";
 		$handler = new stream($this->host, $this->port);
 		$handler->send($command);
 		$result = $handler->recv(1);
@@ -32,7 +32,7 @@ class system
 	
 	public function getdockerstats($name)
 	{
-		$command = "docker-instance-status {$name}\n";
+		$command = "/dns/tm/sys/usr/local/bin/docker-instance-status {$name}\n";
 		$handler = new stream($this->host, $this->port);
 		$handler->send($command);
 		$result = $handler->recv(1);

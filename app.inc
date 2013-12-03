@@ -53,7 +53,7 @@ class app extends ldap
 		$data['cn'] = $row['uid'];
 		$data['mailQuota'] = '100M';
 		$data['mailDeliveryOption'] = 'forward';
-		$data['gecos'] = $row['gecos'];
+		$data['description'] = $row['description'];
 		$data['objectClass'] = $this->schema['objectClass'];
 		$data['owner'] = ($row['owner']?"{$row['owner']}":"{$GLOBALS['CONFIG']['LDAP_ADMIN']}");
 		$data['member'] = ($row['owner']?"{$row['owner']}":"{$GLOBALS['CONFIG']['LDAP_ADMIN']}");

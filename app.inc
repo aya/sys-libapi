@@ -32,6 +32,7 @@ class app extends ldap
 		$this->schema['objectClass'][] = 'posixGroup';
 		$this->schema['objectClass'][] = 'mailRecipient';
 		$this->schema['objectClass'][] = 'groupOfNames';
+		$this->schema['objectClass'][] = 'inetSubscriber';
 
 		return $this->schema;
 	}
@@ -54,7 +55,11 @@ class app extends ldap
 		$data['mailQuota'] = '100M';
 		$data['mailDeliveryOption'] = 'forward';
 		$data['description'] = $row['description'];
+		$data['host'][] = 'proxy-001';
+		$data['host'][] = 'proxy-002';
 		$data['objectClass'] = $this->schema['objectClass'];
+		$data['inetAuthorizedServices'][] = 'sshd';
+		$data['inetAuthorizedServices'][] = 'ftp';
 		$data['owner'] = ($row['owner']?"{$row['owner']}":"{$GLOBALS['CONFIG']['LDAP_ADMIN']}");
 		$data['member'] = ($row['owner']?"{$row['owner']}":"{$GLOBALS['CONFIG']['LDAP_ADMIN']}");
 				

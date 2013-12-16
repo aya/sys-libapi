@@ -30,9 +30,9 @@ class system
 		return $result;
 	}
 	
-	public function getdockerstats($vm, $port)
+	public function getdockerstats($vm, $process, $port)
 	{
-		$command = "/dns/tm/sys/usr/local/bin/runit-stats {$vm} {$port}\n";
+		$command = "/dns/tm/sys/usr/local/bin/docker-stats {$vm} {$process} {$port}\n";
 		$handler = new stream($this->host, $this->port);
 		$handler->send($command);
 		$result = $handler->recv(1);

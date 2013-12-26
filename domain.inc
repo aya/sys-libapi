@@ -29,6 +29,7 @@ class domain extends ldap
 		$this->schema[] = 'mailForwardingAddress';
 		$this->schema[] = 'mailHost';
 		$this->schema[] = 'owner';
+		$this->schema[] = 'gecos';
 		$this->schema['objectClass'][] = 'top';
 		$this->schema['objectClass'][] = 'domain';
 		$this->schema['objectClass'][] = 'dnsDomain';
@@ -50,6 +51,7 @@ class domain extends ldap
 		$data['gidNumber'] = $data['uidNumber'];
 		$data['mail'] = 'hostmaster@' . $row['domain'];
 		$data['homeDirectory'] = ldap::dirFromDN($row['dn']);
+		$data['gecos'] = ($row['gecos']?"{$row['gecos']}":ldap::dirFromDN($row['dn']));
 		$data['cn'] = $row['uid'];
 		$data['associatedDomain'] = $row['domain'];
 		$data['aRecord'] = $GLOBALS['CONFIG']['A_RECORD'];

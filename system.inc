@@ -34,9 +34,9 @@ class system
 		return $result;
 	}
 
-	public function getdatabasesize($database)
+	public function getdatabasesize($database, $type = 'mysql')
 	{
-			$command = "/dns/tm/sys/usr/local/bin/getdbsize {$database}\n";
+			$command = "/dns/tm/sys/usr/local/bin/getdbsize {$database} {$type}\n";
 			
 		$handler = new stream($this->host, $this->port);
 		$handler->send($command);

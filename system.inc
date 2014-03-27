@@ -33,6 +33,17 @@ class system
 		
 		return $result;
 	}
+
+	public function getdatabasesize($database)
+	{
+			$command = "/dns/tm/sys/usr/local/bin/getdbsize {$database}\n";
+			
+		$handler = new stream($this->host, $this->port);
+		$handler->send($command);
+		$result = $handler->recv(1);
+		
+		return $result;
+	}
 	
 	public function getdockerstats($vm, $process, $port)
 	{

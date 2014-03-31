@@ -16,6 +16,11 @@ class action extends handler
 		return array('returns'=>$this->returns, 'params'=>$this->params);
 	}
 	
+	public function getParams()
+	{
+		return $this->params;
+	}
+	
 	public function getParam($name)
 	{
 		$param = null;

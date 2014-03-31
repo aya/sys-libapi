@@ -21,7 +21,7 @@ class action extends handler
 		$data = array();
 		
 		foreach( $this->params as $p )
-			$data[$key] = request::getCheckParam($p);
+			$data[$p['name'][0]] = request::getCheckParam($p);
 
 		return $data;
 	}

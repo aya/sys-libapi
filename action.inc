@@ -18,13 +18,11 @@ class action extends handler
 	
 	public function getParams()
 	{
-		$data = $array();
+		$data = array();
 		
 		foreach( $this->params as $p )
-		{
 			$data[$key] = request::getCheckParam($p);
-		}
-	
+
 		return $data;
 	}
 	

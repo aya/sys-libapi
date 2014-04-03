@@ -13,9 +13,9 @@ class gearman
 		$this->key = $key;
 	}
 
-	public function sendSync($command, $server = 'sys-001')
+	public function sendSync($command, $host = 'sys-001')
 	{
-		$msg = array('command'=>$command, 'server'=>$server, 'key'=>$this->key);
+		$msg = array('command'=>$command, 'host'=>$host, 'key'=>$this->key);
 		$msg = json_encode($msg);
 		
 		$result = $this->client->do("execCmd", $msg);
@@ -23,9 +23,9 @@ class gearman
 		return $result;		
 	}
 	
-	public function sendAsync($command, $server = 'sys-001')
+	public function sendAsync($command, $host = 'sys-001')
 	{
-		$msg = array('command'=>$command, 'server'=>$server, 'key'=>$this->key);
+		$msg = array('command'=>$command, 'host'=>$host, 'key'=>$this->key);
 		$msg = json_encode($msg);
 		
 		$this->client->doBackground("execCmd", $msg);

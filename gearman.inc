@@ -23,7 +23,7 @@ class gearman
 		return $result;		
 	}
 	
-	public function sendAsync($command)
+	public function sendAsync($command, $server = 'sys-001')
 	{
 		$msg = array('command'=>$command, 'server'=>$server, 'key'=>$this->key);
 		$msg = json_encode($msg);

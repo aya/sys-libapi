@@ -107,10 +107,9 @@ $GLOBALS['CONFIG']['MONGODB_ROOT_USER']  = $conf['Main']['MONGODB_ROOT_USER'];
 $GLOBALS['CONFIG']['MONGODB_ROOT_PASSWORD']  = $conf['Main']['MONGODB_ROOT_PASSWORD'];
 $GLOBALS['CONFIG']['A_RECORD']  	= $conf['Main']['A_RECORD'];
 $GLOBALS['CONFIG']['SYSTEM_HOST']  	= $conf['Main']['SYSTEM_HOST'];
-$GLOBALS['CONFIG']['CF_HOST']  		= $conf['Main']['CF_HOST'];
-$GLOBALS['CONFIG']['CF_USERNAME']  	= $conf['Main']['CF_USERNAME'];
-$GLOBALS['CONFIG']['CF_PASSWORD']  	= $conf['Main']['CF_PASSWORD'];
-$GLOBALS['CONFIG']['CF_TOKEN']  	= $conf['Main']['CF_TOKEN'];
+$GLOBALS['CONFIG']['GEARMAN_HOST']  = $conf['Main']['GEARMAN_HOST'];
+$GLOBALS['CONFIG']['GEARMAN_PORT']  = $conf['Main']['GEARMAN_PORT'];
+$GLOBALS['CONFIG']['GEARMAN_KEY']  	= $conf['Main']['GEARMAN_KEY'];
 
 unset($conf);
 

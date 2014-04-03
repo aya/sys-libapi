@@ -24,7 +24,7 @@ if( $GLOBALS['CONFIG']['SYSTEM_HOST'] )
 
 if( $GLOBALS['CONFIG']['GEARMAN_HOST'] )
 {
-	$GLOBALS['system'] = new gearman($GLOBALS['CONFIG']['GEARMAN_HOST'], $GLOBALS['CONFIG']['GEARMAN_KEY'], $GLOBALS['CONFIG']['GEARMAN_PORT']);
+	$GLOBALS['gearman'] = new gearman($GLOBALS['CONFIG']['GEARMAN_HOST'], $GLOBALS['CONFIG']['GEARMAN_KEY'], $GLOBALS['CONFIG']['GEARMAN_PORT']);
 }
 						
 $GLOBALS['security'] = new security();

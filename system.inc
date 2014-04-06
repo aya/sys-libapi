@@ -34,9 +34,9 @@ class system
 		return $result;
 	}
 
-	public function getdatabasesize($database, $type = 'mysql', $server = 'sql.olympe.in')
+	public function getservicesize($service, $type = 'mysql', $server = 'sql.olympe.in')
 	{
-		$command = "/dns/tm/sys/usr/local/bin/getdbsize {$database} {$type} {$server}\n";
+		$command = "/dns/tm/sys/usr/local/bin/getservicesize {$service} {$type} {$server}\n";
 			
 		$handler = new stream($this->host, $this->port);
 		$handler->send($command);

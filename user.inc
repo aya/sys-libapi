@@ -32,6 +32,7 @@ class user extends ldap
 		$this->schema[] = 'description';
 		$this->schema[] = 'gecos';
 		$this->schema[] = 'owner';
+		$this->schema[] = 'sshPublicKey';
 		$this->schema['objectClass'][] = 'top';
 		$this->schema['objectClass'][] = 'person';
 		$this->schema['objectClass'][] = 'inetOrgPerson';

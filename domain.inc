@@ -52,7 +52,13 @@ class domain extends ldap
 		$data['homeDirectory'] = ldap::dirFromDN($row['dn']);
 		$data['cn'] = $row['uid'];
 		$data['associatedDomain'] = $row['domain'];
-		$data['aRecord'] = $GLOBALS['CONFIG']['A_RECORD'];
+		if( $GLOBALS['CONFIG']['A_RECORD_2'] )
+		{
+			$data['aRecord'][] =  $GLOBALS['CONFIG']['A_RECORD'];
+			$data['aRecord'][] =  $GLOBALS['CONFIG']['A_RECORD_2'];
+		}
+		else
+			$data['aRecord'] = $GLOBALS['CONFIG']['A_RECORD'];
 		$data['mDRecord'] = 'virtual';
 		$data['mXRecord'][] = '10 mx1.' . $GLOBALS['CONFIG']['DOMAIN'];
 		$data['mXRecord'][] = '20 mx2.' . $GLOBALS['CONFIG']['DOMAIN'];

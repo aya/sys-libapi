@@ -101,6 +101,7 @@ $GLOBALS['CONFIG']['PGSQL_ROOT_PORT']  = $conf['Main']['PGSQL_ROOT_PORT'];
 $GLOBALS['CONFIG']['PGSQL_ROOT_USER']  = $conf['Main']['PGSQL_ROOT_USER'];
 $GLOBALS['CONFIG']['PGSQL_ROOT_PASSWORD']  = $conf['Main']['PGSQL_ROOT_PASSWORD'];
 $GLOBALS['CONFIG']['A_RECORD']  	= $conf['Main']['A_RECORD'];
+$GLOBALS['CONFIG']['A_RECORD_2']  	= $conf['Main']['A_RECORD_2'];
 $GLOBALS['CONFIG']['SYSTEM_HOST']  	= $conf['Main']['SYSTEM_HOST'];
 $GLOBALS['CONFIG']['CF_HOST']  		= $conf['Main']['CF_HOST'];
 $GLOBALS['CONFIG']['CF_USERNAME']  	= $conf['Main']['CF_USERNAME'];

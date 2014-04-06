@@ -81,17 +81,10 @@ class user extends ldap
             $data['objectClass'][] = 'ipHost';
             $data['ipHostNumber'] = $row['ipHostNumber'];
             $data['inetAuthorizedServices'][] = 'sshd';
-			
-			if( $GLOBALS['CONFIG']['SYMLINK'] == 1 )
-			{
-				$data['host'][] = 'on-001';
-				$data['host'][] = 'on-002';
-			}
-			else
-			{
-				$data['host'][] = 'proxy-001';
-				$data['host'][] = 'proxy-002';
-			}
+			$data['host'][] = 'proxy-001';
+			$data['host'][] = 'proxy-002';
+			$data['host'][] = 'proxy-003';
+			$data['host'][] = 'proxy-004';
         }
 		
 		$data['owner'] = ($row['owner']?"{$row['owner']}":"{$GLOBALS['CONFIG']['LDAP_ADMIN']}");

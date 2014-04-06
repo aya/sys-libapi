@@ -20,9 +20,24 @@ class system
 		$this->port = $port;
 	}
 
-	public function getquota($uidnumber, $type = 'group')
+	public function getquota($uidnumber, $type = 'group', $max = '0')
 	{
-		$command = "/dns/tm/sys/usr/local/bin/getuse {$uidnumber} {$type}\n";
+		if( $max != 0 )
+			$command = "/dns/tm/sys/usr/local/bin/getuse {$uidnumber} {$type} {$max}\n";
+		else
+			$command = "/dns/tm/sys/usr/local/bin/getuse {$uidnumber} {$type}\n";
+			
+		$handler = new stream($this->host, $this->port);
+		$handler->send($command);
+		$result = $handler->recv(1);
+		
+		return $result;
+	}
+
+	public function getdatabasesize($database, $type = 'mysql', $server = 'sql.olympe.in')
+	{
+		$command = "/dns/tm/sys/usr/local/bin/getdbsize {$database} {$type} {$server}\n";
+			
 		$handler = new stream($this->host, $this->port);
 		$handler->send($command);
 		$result = $handler->recv(1);

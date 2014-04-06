@@ -29,6 +29,7 @@ class domain extends ldap
 		$this->schema[] = 'mailForwardingAddress';
 		$this->schema[] = 'mailHost';
 		$this->schema[] = 'owner';
+		$this->schema[] = 'gecos';
 		$this->schema['objectClass'][] = 'top';
 		$this->schema['objectClass'][] = 'domain';
 		$this->schema['objectClass'][] = 'dnsDomain';
@@ -50,6 +51,7 @@ class domain extends ldap
 		$data['gidNumber'] = $data['uidNumber'];
 		$data['mail'] = 'hostmaster@' . $row['domain'];
 		$data['homeDirectory'] = ldap::dirFromDN($row['dn']);
+		$data['gecos'] = ($row['gecos']?"{$row['gecos']}":ldap::dirFromDN($row['dn']));
 		$data['cn'] = $row['uid'];
 		$data['associatedDomain'] = $row['domain'];
 		if( $GLOBALS['CONFIG']['A_RECORD_2'] )
@@ -60,8 +62,11 @@ class domain extends ldap
 		else
 			$data['aRecord'] = $GLOBALS['CONFIG']['A_RECORD'];
 		$data['mDRecord'] = 'virtual';
+		$data['mailHost'] = 'mail.'  . $GLOBALS['CONFIG']['DOMAIN'];
 		$data['mXRecord'][] = '10 mx1.' . $GLOBALS['CONFIG']['DOMAIN'];
 		$data['mXRecord'][] = '20 mx2.' . $GLOBALS['CONFIG']['DOMAIN'];
+		$data['mXRecord'][] = '30 mx3.' . $GLOBALS['CONFIG']['DOMAIN'];
+		$data['mXRecord'][] = '40 mx4.' . $GLOBALS['CONFIG']['DOMAIN'];
 		$data['nSRecord'][] = 'ns1.' . $GLOBALS['CONFIG']['DOMAIN'];
 		$data['nSRecord'][] = 'ns2.' . $GLOBALS['CONFIG']['DOMAIN'];
 		$data['sOARecord'] = 'ns.' . $GLOBALS['CONFIG']['DOMAIN'] . '. hostmaster.'. $GLOBALS['CONFIG']['DOMAIN'] . '. ' . substr(time(),0,10) . ' 3600 600 604800 86400';

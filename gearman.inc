@@ -23,8 +23,10 @@ class gearman
 			$msg = array('command'=>$c, 'host'=>$host, 'key'=>$this->key);
 			$msg = json_encode($msg);
 		
-			$this->client->do("execCmd", $msg);
+			$result = $this->client->do("execCmd", $msg);
 		}
+		
+		return $result;
 	}
 	
 	public function sendAsync($command, $host = 'sys-001')

@@ -13,10 +13,10 @@ class gearman
 		$this->key = $key;
 	}
 
-	public function sendSync($command, $host = 'sys-001')
+	public function sendSync($commands, $host = 'sys-001')
 	{
-		if( !is_array($command) )
-			$commands = array($command);
+		if( !is_array($commands) )
+			$commands = array($commands);
 		
 		foreach( $commands as $c )
 		{
@@ -29,10 +29,10 @@ class gearman
 		return $result;
 	}
 	
-	public function sendAsync($command, $host = 'sys-001')
+	public function sendAsync($commands, $host = 'sys-001')
 	{
-		if( !is_array($command) )
-			$commands = array($command);
+		if( !is_array($commands) )
+			$commands = array($commands);
 		
 		foreach( $commands as $c )
 		{

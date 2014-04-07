@@ -15,20 +15,30 @@ class gearman
 
 	public function sendSync($command, $host = 'sys-001')
 	{
-		$msg = array('command'=>$command, 'host'=>$host, 'key'=>$this->key);
-		$msg = json_encode($msg);
+		if( !is_array($command) )
+			$commands = array($command);
 		
-		$result = $this->client->do("execCmd", $msg);
-
-		return $result;		
+		foreach( $commands as $c )
+		{
+			$msg = array('command'=>$c, 'host'=>$host, 'key'=>$this->key);
+			$msg = json_encode($msg);
+		
+			$this->client->do("execCmd", $msg);
+		}
 	}
 	
 	public function sendAsync($command, $host = 'sys-001')
 	{
-		$msg = array('command'=>$command, 'host'=>$host, 'key'=>$this->key);
-		$msg = json_encode($msg);
+		if( !is_array($command) )
+			$commands = array($command);
 		
-		$this->client->doBackground("execCmd", $msg);
+		foreach( $commands as $c )
+		{
+			$msg = array('command'=>$c, 'host'=>$host, 'key'=>$this->key);
+			$msg = json_encode($msg);
+		
+			$this->client->doBackground("execCmd", $msg);
+		}
 	}
 }
 

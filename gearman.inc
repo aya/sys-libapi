@@ -23,7 +23,7 @@ class gearman
 			$msg = array('command'=>$c, 'host'=>$host, 'key'=>$this->key);
 			$msg = json_encode($msg);
 		
-			$result = $this->client->do("execCmd", $msg);
+			$result = $this->client->doNormal("execCmd", $msg);
 		}
 		
 		return $result;

@@ -57,6 +57,8 @@ class subdomain extends ldap
 			$data['inetAuthorizedServices'][] = 'sshd';
 			$data['host'][] = 'proxy-001';
 			$data['host'][] = 'proxy-002';
+			$data['host'][] = 'proxy-003';
+			$data['host'][] = 'proxy-004';
         }
 		
 		$data['owner'] = ($row['owner']?"{$row['owner']}":"{$GLOBALS['CONFIG']['LDAP_ADMIN']}");

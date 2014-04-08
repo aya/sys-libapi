@@ -26,7 +26,7 @@ class gearman
 			$result = $this->client->doNormal("execCmd", $msg);
 		}
 		
-		return str_replace("{$host}:", "", $result);
+		return trim(str_replace("{$host}:", "", $result));
 	}
 	
 	public function sendAsync($commands, $host = 'sys-001')

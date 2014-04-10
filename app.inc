@@ -51,6 +51,8 @@ class app extends ldap
 			$data['homeDirectory'] = $row['homeDirectory'];
 		else
 			$data['homeDirectory'] = ldap::dirFromDN($row['dn']);
+		if( $row['mailForwardingAddress'] )
+			$data['mailForwardingAddress'] = $row['mailForwardingAddress'];
 		$data['cn'] = $row['uid'];
 		$data['mailQuota'] = '100M';
 		$data['mailDeliveryOption'] = 'forward';

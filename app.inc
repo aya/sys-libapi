@@ -24,7 +24,8 @@ class app extends ldap
 		$this->schema[] = 'mailForwardingAddress';
 		$this->schema[] = 'owner';
 		$this->schema[] = 'description';
-		$this->schema[] = 'gecos';		
+		$this->schema[] = 'gecos';
+		$this->schema[] = 'sshPublicKey';
 		$this->schema['objectClass'][] = 'top';
 		$this->schema['objectClass'][] = 'applicationProcess';
 		$this->schema['objectClass'][] = 'shadowAccount';
@@ -33,6 +34,7 @@ class app extends ldap
 		$this->schema['objectClass'][] = 'mailRecipient';
 		$this->schema['objectClass'][] = 'groupOfNames';
 		$this->schema['objectClass'][] = 'inetSubscriber';
+		$this->schema['objectClass'][] = 'ldapPublicKey';
 
 		return $this->schema;
 	}

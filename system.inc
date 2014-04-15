@@ -47,7 +47,7 @@ class system
 		}
 		
 		// exception for AS pgsql deprecated
-		if( stropos($service, 'postgresql-') !== false )
+		if( strpos($service, 'postgresql-') !== false )
 			$port = 5432;
 		
 		$command = "/dns/tm/sys/usr/local/bin/getservicesize {$service} {$type} {$server} {$port}\n";

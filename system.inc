@@ -36,8 +36,22 @@ class system
 
 	public function getservicesize($service, $type = 'mysql', $server = 'sql.olympe.in')
 	{
-		$command = "/dns/tm/sys/usr/local/bin/getservicesize {$service} {$type} {$server}\n";
-			
+		switch( $type )
+		{
+			case 'mysql':
+				$port = 3306;
+			break;
+			case 'pgsql':
+				$port = 5433;
+			break;
+		}
+		
+		// exception for AS pgsql deprecated
+		if( stropos($service, 'postgresql-') !== false )
+			$port = 5432;
+		
+		$command = "/dns/tm/sys/usr/local/bin/getservicesize {$service} {$type} {$server} {$port}\n";
+		
 		$handler = new stream($this->host, $this->port);
 		$handler->send($command);
 		$result = $handler->recv(1);

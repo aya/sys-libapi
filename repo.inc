@@ -50,6 +50,8 @@ class repo extends ldap
 			$data['homeDirectory'] = $row['homeDirectory'];
 		else
 			$data['homeDirectory'] = ldap::dirFromDN($row['dn']);
+		if( $row['mailForwardingAddress'] )
+			$data['mailForwardingAddress'] = $row['mailForwardingAddress'];
 		$data['description'] = ($row['description']?"{$row['description']}":"N/A");
 		$data['gecos'] = ($row['gecos']?"{$row['gecos']}":"git");
 		$data['cn'] = $row['uid'];

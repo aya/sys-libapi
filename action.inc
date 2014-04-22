@@ -16,6 +16,16 @@ class action extends handler
 		return array('returns'=>$this->returns, 'params'=>$this->params);
 	}
 	
+	public function getParams()
+	{
+		$data = array();
+		
+		foreach( $this->params as $p )
+			$data[$p['name'][0]] = request::getCheckParam($p);
+
+		return $data;
+	}
+	
 	public function getParam($name)
 	{
 		$param = null;

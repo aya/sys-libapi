@@ -20,9 +20,38 @@ class system
 		$this->port = $port;
 	}
 
-	public function getquota($uidnumber, $type = 'group')
+	public function getquota($uidnumber, $type = 'group', $max = '0')
 	{
-		$command = "/dns/tm/sys/usr/local/bin/getuse {$uidnumber} {$type}\n";
+		if( $max != 0 )
+			$command = "/dns/tm/sys/usr/local/bin/getuse {$uidnumber} {$type} {$max}\n";
+		else
+			$command = "/dns/tm/sys/usr/local/bin/getuse {$uidnumber} {$type}\n";
+			
+		$handler = new stream($this->host, $this->port);
+		$handler->send($command);
+		$result = $handler->recv(1);
+		
+		return $result;
+	}
+
+	public function getservicesize($service, $type = 'mysql', $server = 'sql.olympe.in')
+	{
+		switch( $type )
+		{
+			case 'mysql':
+				$port = 3306;
+			break;
+			case 'pgsql':
+				$port = 5433;
+			break;
+		}
+		
+		// exception for AS pgsql deprecated
+		if( strpos($service, 'postgresql-') !== false )
+			$port = 5432;
+		
+		$command = "/dns/tm/sys/usr/local/bin/getservicesize {$service} {$type} {$server} {$port}\n";
+		
 		$handler = new stream($this->host, $this->port);
 		$handler->send($command);
 		$result = $handler->recv(1);

@@ -38,7 +38,7 @@ class request
 		if( ($rule & self::PUNCT) > 0 )
 			$regex .= "\\._\\-";
 		if( ($rule & self::SPECIAL) > 0 )
-			$regex .= "\\x21-\\x2f\\x3a-\\x40\\x5b-\\x60\\x7b-\\x7e]|\\x{c2}[\\x{a1}-\\x{bf}]|[a"; // fix for UTF8. We assume that if special characters are allowed, then the letter 'a' also is. This prevents an empty '[]' at the end of the regexp
+			$regex .= "\\x09\\x21-\\x2f\\x3a-\\x40\\x5b-\\x60\\x7b-\\x7e]|\\x{c2}[\\x{a1}-\\x{bf}]|[a"; // fix for UTF8. We assume that if special characters are allowed, then the letter 'a' also is. This prevents an empty '[]' at the end of the regexp
 		if( ($rule & self::NEWLINE) > 0 )
 			$regex .= "\\r\\n";
 		

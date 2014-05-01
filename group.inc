@@ -46,6 +46,7 @@ class group extends ldap
 	{
 		$data = array();
 		$data['uid'] = $row['uid'];
+		$data['cn'] = $row['uid'];
 		$data['userPassword'] = ($row['userPassword']?"{$row['userPassword']}":"changeme");
 		$data['uidNumber'] = $GLOBALS['ldap']->newUID();
 		$data['gidNumber'] = $data['uidNumber'];
@@ -58,7 +59,6 @@ class group extends ldap
 			$data['mailForwardingAddress'] = $row['mailForwardingAddress'];
 		if( $row['gecos'] )
 			$data['gecos'] = $row['gecos'];
-		$data['cn'] = $data['givenName'] . ' ' . $data['sn'];
 		$data['mailQuota'] = '100M';
 		$data['mailDeliveryOption'][] = 'mailbox';
 		$data['mailDeliveryOption'][] = 'forward';

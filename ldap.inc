@@ -209,7 +209,7 @@ class ldap
 					$dn = "uid={$value},ou=Users,"; 
 				break;
 				case self::GROUP:
-					$dn = "uid={$value},ou=Groups,"; 
+					$dn = "cn={$value},ou=Groups,"; 
 				break;	
 				case self::APP:
 					$dn = "cn={$value},ou=Apps,";

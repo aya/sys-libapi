@@ -1,12 +1,12 @@
 <?php
 
-if( $GLOBALS['CONFIG']['DB_HOST'] )
+if( $GLOBALS['CONFIG']['MYSQL_HOST'] )
 {
-	$GLOBALS['db'] = new mysql($GLOBALS['CONFIG']['DB_HOST'], 
-								$GLOBALS['CONFIG']['DB_USERNAME'], 
-								$GLOBALS['CONFIG']['DB_PASSWORD'], 
-								$GLOBALS['CONFIG']['DB_DATABASE'], 
-								$GLOBALS['CONFIG']['DB_PORT']);
+	$GLOBALS['db'] = new mysql($GLOBALS['CONFIG']['MYSQL_HOST'], 
+								$GLOBALS['CONFIG']['MYSQL_USERNAME'], 
+								$GLOBALS['CONFIG']['MYSQL_PASSWORD'], 
+								$GLOBALS['CONFIG']['MYSQL_DATABASE'], 
+								$GLOBALS['CONFIG']['MYSQL_PORT']);
 }
 
 if( $GLOBALS['CONFIG']['LDAP_HOST'] )

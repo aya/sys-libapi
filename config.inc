@@ -20,36 +20,18 @@ $GLOBALS['CONFIG']['APIDIR'] 		= $GLOBALS['CONFIG']['ROOT'] . 'api/';
 $GLOBALS['CONFIG']['DEBUG'] 		= true;
 $GLOBALS['CONFIG']['THROW_ERRORS'] 	= (E_ALL | E_STRICT) & ~E_NOTICE;
 
-
-switch( $_SERVER["HTTP_HOST"] )
+$domain = explode( '.', $_SERVER["HTTP_HOST"] );
+$dir .= '/dns/' . array_pop( $domain ) . '/' . array_pop( $domain ) . '/etc/settings';
+$file = $dir . '/' . implode( '.', $domain ) . '.ini';
+if( file_exists( $file ) )
 {
-	case 'api.dev.anotherservice.com':
-		$conf = parse_ini_file('/dns/com/anotherservice/etc/settings/api.dev.ini', true);
-		$conf['type'] = 'file';
-	break;
-	case 'api.anotherservice.com':
-		$conf = parse_ini_file('/dns/com/anotherservice/etc/settings/api.ini', true);
-		$conf['type'] = 'file';
-	break;
-	case 'api.dev.bus-it.com':
-		$conf = parse_ini_file('/dns/com/bus-it/etc/settings/api.dev.ini', true);
-		$conf['type'] = 'file';
-	break;
-	case 'api.bus-it.com':
-		$conf = parse_ini_file('/dns/com/bus-it/etc/settings/api.ini', true);
-		$conf['type'] = 'file';
-	break;
-	case 'api.dev.olympe.in':
-		$conf = parse_ini_file('/dns/in/olympe/etc/settings/api.dev.ini', true);
-		$conf['type'] = 'file';
-	break;
-	case 'api.olympe.in':
-		$conf = parse_ini_file('/dns/in/olympe/etc/settings/api.ini', true);
-		$conf['type'] = 'file';
-	break;
-	default:
-	    $conf = parse_ini_file('/dns/com/anotherservice/etc/settings/api.ini', true);
-	    $conf['type'] = 'file';
+    $conf = parse_ini_file( $file, true );
+    $conf['type'] = 'file';
+}
+else if( file_exists( '../api.ini' ) )
+{
+    $conf = parse_ini_file('../api.ini');
+    $conf['type'] = 'file';
 }
 
 if( $conf['type'] == 'file' && isset($conf['section']) )

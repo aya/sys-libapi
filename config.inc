@@ -48,22 +48,11 @@ switch( $_SERVER["HTTP_HOST"] )
 		$conf['type'] = 'file';
 	break;
 	default:
-		$conf = parse_ini_file('/dns/com/anotherservice/etc/settings/api.ini', true);
-		$conf['type'] = 'file';
+	    $conf = parse_ini_file('/dns/com/anotherservice/etc/settings/api.ini', true);
+	    $conf['type'] = 'file';
 }
 
-if( $conf['type'] == 'env' )
-{
-    $services_json = getenv('VCAP_SERVICES');
-    $services = json_decode($services_json, true);
-    $mysql_config = $services['mysql-5.1'][0]['credentials'];
-    $GLOBALS['CONFIG']['MYSQL_HOST']           = $mysql_config['hostname'];
-    $GLOBALS['CONFIG']['MYSQL_PORT']           = $mysql_config['port'];
-    $GLOBALS['CONFIG']['MYSQL_USERNAME']       = $mysql_config['user'];
-    $GLOBALS['CONFIG']['MYSQL_PASSWORD']       = $mysql_config['password'];
-    $GLOBALS['CONFIG']['MYSQL_DATABASE']       = $mysql_config['name'];
-}
-else if( $conf['type'] == 'file' && isset($conf['section']) )
+if( $conf['type'] == 'file' && isset($conf['section']) )
 {
 	foreach( $conf[$conf['section']] as $key => $value )
 		$GLOBALS['CONFIG'][$key] = $value;

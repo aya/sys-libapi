@@ -57,60 +57,17 @@ if( $conf['type'] == 'env' )
     $services_json = getenv('VCAP_SERVICES');
     $services = json_decode($services_json, true);
     $mysql_config = $services['mysql-5.1'][0]['credentials'];
-    $GLOBALS['CONFIG']['DB_HOST']           = $mysql_config['hostname'];
-    $GLOBALS['CONFIG']['DB_PORT']           = $mysql_config['port'];
-    $GLOBALS['CONFIG']['DB_USERNAME']       = $mysql_config['user'];
-    $GLOBALS['CONFIG']['DB_PASSWORD']       = $mysql_config['password'];
-    $GLOBALS['CONFIG']['DB_DATABASE']       = $mysql_config['name'];
+    $GLOBALS['CONFIG']['MYSQL_HOST']           = $mysql_config['hostname'];
+    $GLOBALS['CONFIG']['MYSQL_PORT']           = $mysql_config['port'];
+    $GLOBALS['CONFIG']['MYSQL_USERNAME']       = $mysql_config['user'];
+    $GLOBALS['CONFIG']['MYSQL_PASSWORD']       = $mysql_config['password'];
+    $GLOBALS['CONFIG']['MYSQL_DATABASE']       = $mysql_config['name'];
 }
-else
+else if( $conf['type'] == 'file' && isset($conf['section']) )
 {
-    $GLOBALS['CONFIG']['DB_HOST'] 		= $conf['Main']['MYSQL_HOST'];
-    $GLOBALS['CONFIG']['DB_PORT'] 		= $conf['Main']['MYSQL_PORT'];
-    $GLOBALS['CONFIG']['DB_USERNAME'] 	= $conf['Main']['MYSQL_USERNAME'];
-    $GLOBALS['CONFIG']['DB_PASSWORD'] 	= $conf['Main']['MYSQL_PASSWORD'];
-    $GLOBALS['CONFIG']['DB_DATABASE'] 	= $conf['Main']['MYSQL_DATABASE'];
+	foreach( $conf[$conf['section']] as $key => $value )
+		$GLOBALS['CONFIG'][$key] = $value;
 }
-
-$GLOBALS['CONFIG']['LDAP_HOST'] 	= $conf['Main']['LDAP_HOST'];
-$GLOBALS['CONFIG']['LDAP_PORT'] 	= $conf['Main']['LDAP_PORT'];
-$GLOBALS['CONFIG']['LDAP_USERNAME']	= $conf['Main']['LDAP_USERNAME'];
-$GLOBALS['CONFIG']['LDAP_PASSWORD']	= $conf['Main']['LDAP_PASSWORD'];
-$GLOBALS['CONFIG']['LDAP_BASE']		= $conf['Main']['LDAP_BASE'];
-$GLOBALS['CONFIG']['LDAP_ADMIN']	= $conf['Main']['LDAP_ADMIN'];
-$GLOBALS['CONFIG']['PIWIK_URL']		= $conf['Main']['PIWIK_URL'];
-$GLOBALS['CONFIG']['PIWIK_TOKEN']	= $conf['Main']['PIWIK_TOKEN'];
-$GLOBALS['CONFIG']['DOMAIN']		= $conf['Main']['DOMAIN'];
-$GLOBALS['CONFIG']['DEV_DOMAIN']	= $conf['Main']['DEV_DOMAIN'];
-$GLOBALS['CONFIG']['JOB_SERVERS'] 	= $conf['Main']['JOB_SERVERS'];
-$GLOBALS['CONFIG']['KEY'] 			= $conf['Main']['KEY'];
-$GLOBALS['CONFIG']['SECRET'] 		= $conf['Main']['SECRET'];
-$GLOBALS['CONFIG']['GPG_KEY'] 		= $conf['Main']['GPG_KEY'];
-$GLOBALS['CONFIG']['SYMLINK'] 		= $conf['Main']['SYMLINK'];
-$GLOBALS['CONFIG']['SHELL'] 		= $conf['Main']['SHELL'];
-$GLOBALS['CONFIG']['GIT_TEMPLATE'] 	= $conf['Main']['GIT_TEMPLATE'];
-$GLOBALS['CONFIG']['ROOT_VAR'] 		= $conf['Main']['ROOT_VAR'];
-$GLOBALS['CONFIG']['ROOT_BIN'] 		= $conf['Main']['ROOT_BIN'];
-$GLOBALS['CONFIG']['APP_MEMORY'] 	= $conf['Main']['APP_MEMORY'];
-$GLOBALS['CONFIG']['MYSQL_ROOT_HOST']  = $conf['Main']['MYSQL_ROOT_HOST'];
-$GLOBALS['CONFIG']['MYSQL_ROOT_PORT']  = $conf['Main']['MYSQL_ROOT_PORT'];
-$GLOBALS['CONFIG']['MYSQL_ROOT_PORT2']  = $conf['Main']['MYSQL_ROOT_PORT2'];
-$GLOBALS['CONFIG']['MYSQL_ROOT_USER']  = $conf['Main']['MYSQL_ROOT_USER'];
-$GLOBALS['CONFIG']['MYSQL_ROOT_PASSWORD']  = $conf['Main']['MYSQL_ROOT_PASSWORD'];
-$GLOBALS['CONFIG']['PGSQL_ROOT_HOST']  = $conf['Main']['PGSQL_ROOT_HOST'];
-$GLOBALS['CONFIG']['PGSQL_ROOT_PORT']  = $conf['Main']['PGSQL_ROOT_PORT'];
-$GLOBALS['CONFIG']['PGSQL_ROOT_USER']  = $conf['Main']['PGSQL_ROOT_USER'];
-$GLOBALS['CONFIG']['PGSQL_ROOT_PASSWORD']  = $conf['Main']['PGSQL_ROOT_PASSWORD'];
-$GLOBALS['CONFIG']['MONGODB_ROOT_HOST']  = $conf['Main']['MONGODB_ROOT_HOST'];
-$GLOBALS['CONFIG']['MONGODB_ROOT_PORT']  = $conf['Main']['MONGODB_ROOT_PORT'];
-$GLOBALS['CONFIG']['MONGODB_ROOT_USER']  = $conf['Main']['MONGODB_ROOT_USER'];
-$GLOBALS['CONFIG']['MONGODB_ROOT_PASSWORD']  = $conf['Main']['MONGODB_ROOT_PASSWORD'];
-$GLOBALS['CONFIG']['A_RECORD']  	= $conf['Main']['A_RECORD'];
-$GLOBALS['CONFIG']['A_RECORD_2']  	= $conf['Main']['A_RECORD_2'];
-$GLOBALS['CONFIG']['SYSTEM_HOST']  	= $conf['Main']['SYSTEM_HOST'];
-$GLOBALS['CONFIG']['GEARMAN_HOST']  = $conf['Main']['GEARMAN_HOST'];
-$GLOBALS['CONFIG']['GEARMAN_PORT']  = $conf['Main']['GEARMAN_PORT'];
-$GLOBALS['CONFIG']['GEARMAN_KEY']  	= $conf['Main']['GEARMAN_KEY'];
 
 unset($conf);
 

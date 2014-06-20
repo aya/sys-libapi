@@ -23,15 +23,18 @@ $GLOBALS['CONFIG']['THROW_ERRORS'] 	= (E_ALL | E_STRICT) & ~E_NOTICE;
 $domain = explode( '.', $_SERVER["HTTP_HOST"] );
 $dir .= '/dns/' . array_pop( $domain ) . '/' . array_pop( $domain ) . '/etc/settings';
 $file = $dir . '/' . implode( '.', $domain ) . '.ini';
+
 if( file_exists( $file ) )
 {
     $conf = parse_ini_file( $file, true );
     $conf['type'] = 'file';
+    $conf['section'] = 'Main';
 }
 else if( file_exists( '../api.ini' ) )
 {
-    $conf = parse_ini_file('../api.ini');
+    $conf = parse_ini_file('../api.ini', true );
     $conf['type'] = 'file';
+    $conf['section'] = 'Main';
 }
 
 if( $conf['type'] == 'file' && isset($conf['section']) )

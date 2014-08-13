@@ -15,6 +15,7 @@ class user extends ldap
 		$this->schema[] = 'sn';
 		$this->schema[] = 'loginShell';
 		$this->schema[] = 'o';
+		$this->schema[] = 'l';
 		$this->schema[] = 'mail';
 		$this->schema[] = 'homeDirectory';
 		$this->schema[] = 'cn';
@@ -29,6 +30,8 @@ class user extends ldap
 		$this->schema[] = 'inetAuthorizedServices';
 		$this->schema[] = 'host';
 		$this->schema[] = 'preferredLanguage';
+		$this->schema[] = 'postalAddress';
+		$this->schema[] = 'postalCode';
 		$this->schema[] = 'description';
 		$this->schema[] = 'gecos';
 		$this->schema[] = 'owner';

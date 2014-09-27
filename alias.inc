@@ -54,6 +54,7 @@ class alias extends ldap
 		$data['associatedDomain'] = $row['domain'];
 		$data['aRecord'] = $GLOBALS['CONFIG']['A_RECORD'];
 		$data['mDRecord'] = 'virtual';
+        $data['mailHost'] = 'mail.'  . $GLOBALS['CONFIG']['DOMAIN'];
 		$data['mXRecord'][] = '10 mx1.' . $GLOBALS['CONFIG']['DOMAIN'];
 		$data['mXRecord'][] = '20 mx2.' . $GLOBALS['CONFIG']['DOMAIN'];
 		$data['nSRecord'][] = 'ns1.' . $GLOBALS['CONFIG']['DOMAIN'];

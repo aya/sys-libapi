@@ -32,6 +32,7 @@ class user extends ldap
 		$this->schema[] = 'description';
 		$this->schema[] = 'gecos';
 		$this->schema[] = 'owner';
+		$this->schema[] = 'title';
 		$this->schema[] = 'sshPublicKey';
 		$this->schema['objectClass'][] = 'top';
 		$this->schema['objectClass'][] = 'person';
@@ -90,7 +91,7 @@ class user extends ldap
 		
 		$data['owner'] = ($row['owner']?"{$row['owner']}":"{$GLOBALS['CONFIG']['LDAP_ADMIN']}");
 		$data['member'] = ($row['owner']?"{$row['owner']}":"{$GLOBALS['CONFIG']['LDAP_ADMIN']}");
-			
+		
 		return $data;
 	}
 	

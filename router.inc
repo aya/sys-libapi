@@ -67,7 +67,11 @@ class router
 		}
 		
 		if( $handler instanceof handler )
+		{
+			hook::pre($handler);
 			$handler->execute();
+			hook::post($handler);
+		}
 		else
 			throw new ApiException('', 404, 'Invalid handler found for URI : ' . $path . ' using handler page : ' . $action_page);
 	}

@@ -21,7 +21,7 @@ $GLOBALS['CONFIG']['DEBUG'] 		= true;
 $GLOBALS['CONFIG']['THROW_ERRORS'] 	= (E_ALL | E_STRICT) & ~E_NOTICE;
 
 $domain = explode( '.', $_SERVER["HTTP_HOST"] );
-$dir .= '/dns/' . array_pop( $domain ) . '/' . array_pop( $domain ) . '/etc/settings';
+$dir  = '/dns/' . array_pop( $domain ) . '/' . array_pop( $domain ) . '/etc/settings';
 $file = $dir . '/' . implode( '.', $domain ) . '.ini';
 
 if( file_exists( $file ) )

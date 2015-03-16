@@ -9,7 +9,7 @@ class logger
 	
 	public static function benchmark($log)
 	{
-		@file_put_contents($GLOBALS['CONFIG']['BENCHMARK_LOG_DIR'].'/'.$_SERVER["HTTP_HOST"].'.log', json_encode($log), FILE_APPEND | LOCK_EX);
+		@file_put_contents($GLOBALS['CONFIG']['BENCHMARK_LOG_DIR'].'/'.$_SERVER["HTTP_HOST"].'.log', json_encode($log)."\n", FILE_APPEND | LOCK_EX);
 	}
 	
 	public static function insert($method, $params, $user)

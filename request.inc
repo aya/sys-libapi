@@ -315,7 +315,7 @@ class request
 	
 	public static function getRemoteIp()
 	{
-		$headers = array("Original-Ip", "X-Forwarded-For", "Proxy-Client-IP", "HTTP_CLIENT_IP", "HTTP_X_FORWARDED_FOR", "REMOTE_ADDR");
+		$headers = array("HTTP_ORIGINAL_IP", "Original-Ip", "X-Forwarded-For", "Proxy-Client-IP", "HTTP_CLIENT_IP", "HTTP_X_FORWARDED_FOR", "REMOTE_ADDR");
 		foreach( $headers as $h )
 			if( isset($_SERVER[$h]) && strlen($_SERVER[$h]) > 0 )
 				return $_SERVER[$h];

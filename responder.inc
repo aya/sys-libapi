@@ -36,7 +36,7 @@ class responder
 		
 		$params = request.getParams();
 		if( preg_match($log['path'], "/^\\/?(self\\/)?tokens?\\/(select|list|view|search).*/is") )
-			params = array();
+			$params = array();
 		$log["parameters"] = $params;
 
 		logger::benchmark($log);

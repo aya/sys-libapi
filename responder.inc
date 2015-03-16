@@ -24,7 +24,7 @@ class responder
 					 "date" => time(),
 					 "path" => request::getCurrentPath(),
 					 "ip" => request::getRemoteIp(),
-					 "error" => ($result instanceof Exception ? result->getMessage() : null),
+					 "error" => ($result instanceof Exception ? $result->getMessage() : null),
 					 "attachments" => array(),
 					 "time" => round((microtime(true) - __EPOCH__) * 1000)
 		);

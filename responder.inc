@@ -22,7 +22,7 @@ class responder
 		$log = array("user" => security::getUser('user_id'),
 					 "username" => security::getUser('user_name'),
 					 "date" => time(),
-					 "path" => request::getCurrentPath(),
+					 "path" => implode("/", request::getCurrentPath()),
 					 "ip" => request::getRemoteIp(),
 					 "error" => ($result instanceof Exception ? $result->getMessage() : null),
 					 "attachments" => array(),
@@ -35,7 +35,7 @@ class responder
 		request::clearParam(array('pass', 'password', 'user_password', 'user_pass'));
 		
 		$params = request::getParams();
-		if( preg_match($log['path'], "/^\\/?(self\\/)?tokens?\\/(select|list|view|search).*/is") )
+		if( preg_match("/^\\/?(self\\/)?tokens?\\/(select|list|view|search).*/is", $log['path']) )
 			$params = array();
 		$log["parameters"] = $params;
 

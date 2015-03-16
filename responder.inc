@@ -34,7 +34,7 @@ class responder
 		request::clearParam($GLOBALS['CONFIG']['PARAMETERS']['NOHTTP']);
 		request::clearParam(array('pass', 'password', 'user_password', 'user_pass'));
 		
-		$params = request.getParams();
+		$params = request::getParams();
 		if( preg_match($log['path'], "/^\\/?(self\\/)?tokens?\\/(select|list|view|search).*/is") )
 			$params = array();
 		$log["parameters"] = $params;

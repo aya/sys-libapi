@@ -11,6 +11,38 @@ class responder
 	private static $currentFormat = 0;
 	public static $defaultFormat = 1; // default to JSON
 	
+	private static function afterSend($andexit)
+	{
+		if( $andexit )
+			exit;
+	}
+	
+	private static function beforeSend($result)
+	{
+		$log = array("user" => security::getUser('user_id'),
+					 "username" => security::getUser('user_name'),
+					 "date" => time(),
+					 "path" => request::getCurrentPath(),
+					 "ip" => request::getRemoteIp(),
+					 "error" => ($result instanceof Exception ? result->getMessage() : null),
+					 "attachments" => array(),
+					 "time" => round((microtime(true) - __EPOCH__) * 1000)
+		);
+		
+		request.clearParam($GLOBALS['CONFIG']['PARAMETERS']['FORMAT']);
+		request.clearParam($GLOBALS['CONFIG']['PARAMETERS']['TOKEN']);
+		request.clearParam($GLOBALS['CONFIG']['PARAMETERS']['NOHTTP']);
+		request.clearParam(array('pass', 'password', 'user_password', 'user_pass'));
+		
+		$params = request.getParams();
+		if( preg_match($log['path'], "/^\\/?(self\\/)?tokens?\\/(select|list|view|search).*/is") )
+			params = array();
+		$log["parameters"] = $params;
+
+		logger::benchmark($log);
+		return $result;
+	}
+	
 	// DEPRECATED
 	public static function sendError($e)
 	{
@@ -25,10 +57,11 @@ class responder
 	
 	public static function send($result=null, $format=0, $andexit=true)
 	{
+		$result = self::beforeSend($result);
+		
 		if( $result === null )
 		{
-			if( $andexit )
-				exit;
+			self::afterSend($andexit);
 			return;
 		}
 		
@@ -62,8 +95,7 @@ class responder
 				echo self::template($result); break;
 		}
 		
-		if( $andexit )
-			exit;
+		self::afterSend($andexit);
 	}
 	
 	public static function detectFormat()

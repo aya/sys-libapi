@@ -29,10 +29,10 @@ class responder
 					 "time" => round((microtime(true) - __EPOCH__) * 1000)
 		);
 		
-		request.clearParam($GLOBALS['CONFIG']['PARAMETERS']['FORMAT']);
-		request.clearParam($GLOBALS['CONFIG']['PARAMETERS']['TOKEN']);
-		request.clearParam($GLOBALS['CONFIG']['PARAMETERS']['NOHTTP']);
-		request.clearParam(array('pass', 'password', 'user_password', 'user_pass'));
+		request::clearParam($GLOBALS['CONFIG']['PARAMETERS']['FORMAT']);
+		request::clearParam($GLOBALS['CONFIG']['PARAMETERS']['TOKEN']);
+		request::clearParam($GLOBALS['CONFIG']['PARAMETERS']['NOHTTP']);
+		request::clearParam(array('pass', 'password', 'user_password', 'user_pass'));
 		
 		$params = request.getParams();
 		if( preg_match($log['path'], "/^\\/?(self\\/)?tokens?\\/(select|list|view|search).*/is") )

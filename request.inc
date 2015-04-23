@@ -142,6 +142,11 @@ class request
 		}
 	}
 	
+	public static function getParams()
+	{
+		return self::$_params;
+	}
+	
 	public static function getCheckParam($rules)
 	{
 		if( !isset($rules['name']) )
@@ -306,6 +311,15 @@ class request
 	{
 		router::forward($page);
 		//require_once($GLOBALS['CONFIG']['APIDIR'] . $page . '.php');
+	}
+	
+	public static function getRemoteIp()
+	{
+		$headers = array("HTTP_ORIGINAL_IP", "Original-Ip", "X-Forwarded-For", "Proxy-Client-IP", "HTTP_CLIENT_IP", "HTTP_X_FORWARDED_FOR", "REMOTE_ADDR");
+		foreach( $headers as $h )
+			if( isset($_SERVER[$h]) && strlen($_SERVER[$h]) > 0 )
+				return $_SERVER[$h];
+		return null;
 	}
 }
 

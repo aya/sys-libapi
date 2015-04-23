@@ -123,7 +123,10 @@ class ldap
 
 	public function search($dn, $filter, $count = false, $sort_by = 'uid', $sort = 'ASC', $scope = 'sub')
 	{
-		$search = @$this->base->search($dn, $filter, array('scope' => $scope));
+		if( $count === true )
+			$search = @$this->base->search($dn, $filter, array('attributes' => array('uidNumber'), 'scope' => $scope));
+		else
+			$search = @$this->base->search($dn, $filter, array('scope' => $scope));
 
 		// count entries
 		if( $count === true )

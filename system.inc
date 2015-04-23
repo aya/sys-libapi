@@ -26,7 +26,7 @@ class system
 			$command = "/dns/tm/sys/usr/local/bin/getuse {$uidnumber} {$type} {$max}\n";
 		else
 			$command = "/dns/tm/sys/usr/local/bin/getuse {$uidnumber} {$type}\n";
-			
+		
 		$handler = new stream($this->host, $this->port);
 		$handler->send($command);
 		$result = $handler->recv(1);

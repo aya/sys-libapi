@@ -7,6 +7,11 @@ class logger
 		error_log($message);
 	}
 	
+	public static function benchmark($log)
+	{
+		@file_put_contents($GLOBALS['CONFIG']['BENCHMARK_LOG_DIR'].'/'.$_SERVER["HTTP_HOST"].'.log', json_encode($log)."\n", FILE_APPEND | LOCK_EX);
+	}
+	
 	public static function insert($method, $params, $user)
 	{
 		$ip = $_SERVER['HTTP_ORIGINAL_IP'];

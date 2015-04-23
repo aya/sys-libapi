@@ -19,6 +19,7 @@ $GLOBALS['CONFIG']['ROOT'] 			= dirname($GLOBALS['CONFIG']['CLASSPATH']) . '/';
 $GLOBALS['CONFIG']['APIDIR'] 		= $GLOBALS['CONFIG']['ROOT'] . 'api/';
 $GLOBALS['CONFIG']['DEBUG'] 		= true;
 $GLOBALS['CONFIG']['THROW_ERRORS'] 	= (E_ALL | E_STRICT) & ~E_NOTICE;
+$GLOBALS['CONFIG']['BENCHMARK_LOG_DIR'] = '/var/log';
 
 $domain = explode( '.', $_SERVER["HTTP_HOST"] );
 $dir  = '/dns/' . array_pop( $domain ) . '/' . array_pop( $domain ) . '/etc/settings';

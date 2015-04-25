@@ -55,6 +55,7 @@ class subdomain extends ldap
 		
 			$data['inetSubscriberStatus'] = 'active';
 			$data['inetAuthorizedServices'][] = 'sshd';
+			$data['inetAuthorizedServices'][] = 'proftpd';
 			$data['host'][] = 'proxy-001';
 			$data['host'][] = 'proxy-002';
 			$data['host'][] = 'proxy-003';
